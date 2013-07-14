@@ -4,8 +4,8 @@ import os
 import logging
 
 from utils import *
-from database import *
-from admin import *
+#from database import *
+#from admin import *
 
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
