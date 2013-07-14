@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+    	{% block title %}
+    	{% endblock %}
+    </title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+  </head>
+  <body>
+  	<div class = "topbar">
+		{% block topbar %}
+		{% endblock %}
+  	</div>
+    <div class = "headline">
+    	{% block headline %}
+    	{% endblock %}
+    </div>
+    <br>
+    <div class = "maincontent">
+    	{% block main_content %}
+    	{% endblock %}
+    </div>
+  </body>
+</html>

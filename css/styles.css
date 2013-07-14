@@ -1,0 +1,11 @@
+.topbar{
+	color:grey;
+	position:absolute;
+	right:5px;
+	top:5px
+	font-size:0.8em;
+}
+
+.error{
+	color:red;
+}

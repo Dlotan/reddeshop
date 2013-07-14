@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>
+    	{% block title %}
+    	{% endblock %}
+    </title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+  </head>
+  <body>
+    <div class = "headline">
+    	{% block headline %}
+    	{% endblock %}
+    </div>
+    <div class = "topbar">
+		{% block topbar %}
+		{% endblock %}
+  	</div>
+    <br>
+    <div class = "maincontent">
+    	{% block main_content %}
+    	{% endblock %}
+    </div>
+    <div class = "btm">
+    	<hr>
+    	SACHEN WIE FACEBOOK TWITTER USW STEHEN HIER (ABOUT KONTAKT...).
+    </div>
+  </body>
+</html>
