@@ -11,8 +11,11 @@ handlers:
 - url: /css
   static_dir: css
 
+- url: /admin.*
+  script: admin.app
+
 - url: .*
-  script: main.app
+  script: user.app
 
 libraries:
 - name: jinja2

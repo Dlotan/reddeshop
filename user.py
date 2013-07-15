@@ -1,9 +1,9 @@
 import webapp2
 import jinja2
 import os
-import logging
+#import logging
 
-from utils import *
+#from utils import *
 #from database import *
 #from admin import *
 
