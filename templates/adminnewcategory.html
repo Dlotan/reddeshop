@@ -1,0 +1,13 @@
+{% extends "adminbase.html" %}
+{% block title %}New Category{% endblock %}
+{% block headline %}Admin New Category{% endblock %}
+{% block main_content %}
+<form method="post">
+	<label>
+		Category Name
+		<input type="text" name = "categoryname">
+	</label>
+	<br>
+	<input type = "submit">
+</form>
+{% endblock %}

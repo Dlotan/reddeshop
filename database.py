@@ -2,13 +2,17 @@ from google.appengine.ext import ndb
 
 class Category(ndb.Model):
     name = ndb.StringProperty(required = True)
+    created = ndb.DateTimeProperty(auto_now_add=True)
+    @classmethod
+    def getAllCategorys(cls):
+        return cls.query()
     @classmethod
     def getCategoryByName(cls,name):
         return cls.query(name == name).get()
     @classmethod
     def addCategory(cls,name):
         # already exist check ??!
-        category = Category(name)
+        category = Category(name = name)
         category.put()
     @classmethod
     def getAllProducts(cls,name):
@@ -22,6 +26,7 @@ class Product(ndb.Model):
     price = ndb.IntegerProperty(required = True)
     description = ndb.TextProperty(required = False)
     pictureurl = ndb.StringProperty(required = False)
+    created = ndb.DateTimeProperty(auto_now_add=True)
     @classmethod
     def addProduct(cls,name,price,category,description = "", pictureurl = ""):
         category = Category.getCategoryByName(category)
