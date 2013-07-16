@@ -1,0 +1,37 @@
+{% extends "adminbase.html" %}
+{% block title %}New Product{% endblock %}
+{% block headline %}Admin New Product{% endblock %}
+{% block main_content %}
+<form method="post">
+	<label>
+		Name
+		<input type="text" name = "name">
+	</label>
+	<br>
+	<label>
+		Category
+		<select name="category" size = "1">
+			{% for category in categories %}
+				<option>{{category.name}}</option>
+			{% endfor %}
+		</select>
+	</label>
+	<br>
+	<label>
+		Price in <b>Cents</b>
+		<input type="text" name = "price">
+	</label>
+	<br>
+	<label>
+		Description
+		<input type="text" name = "description">
+	</label>
+	<br>
+	<label>
+		Picture URL
+		<input type="text" name = "pictureurl">
+	</label>
+	<br>
+	<input type = "submit">
+</form>
+{% endblock %}

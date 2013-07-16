@@ -1,21 +1,33 @@
-{% extends "adminbase.html" %}
-{% block title %}Admin Login{% endblock %}
-{% block headline %}Admin Login{% endblock %}
-{% block main_content %}
-<div class = "loginWindow">
-	<form method="post">
-		<label>
-			Username
-			<input type="text" name = "username" value = "{{username}}">
-		</label>
-		<br>
-		<label>
-			Password
-			<input type ="password" name = "password">
-		</label>
-		<br>
-		<input type = "submit">
-	</form>
-	{{errortext}}
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+    	Admin Login
+    </title>
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+  </head>
+  <body>
+    <div class = "headline">
+    	Admin Login
+    </div>
+    <br>
+    <div class = "maincontent">
+    	<div class = "loginWindow">
+			<form method="post">
+				<label>
+					Username
+					<input type="text" name = "username" value = "{{username}}">
+				</label>
+				<br>
+				<label>
+					Password
+					<input type ="password" name = "password">
+				</label>
+				<br>
+				<input type = "submit">
+			</form>
+			{{errortext}}
+		</div>
+    </div>
+  </body>
+</html>

@@ -4,7 +4,7 @@ import os
 #import logging
 
 #from utils import *
-from database import *
+from database import Category,Product
 #from admin import *
 
 
@@ -62,7 +62,7 @@ class AdminNewCategory(AdminBaseHandler):
         self.adminrender("adminnewcategory.html")
     def post(self):
         if self.checkAdminCookie():
-            categoryname = self.request.get("categoryname")
+            categoryname = self.request.get("name")
             Category.addCategory(categoryname)
             self.redirect("/admin/index")
         else:
@@ -71,12 +71,26 @@ class AdminNewCategory(AdminBaseHandler):
 #todo
 class AdminEditCategory(AdminBaseHandler):
     def get(self):
-        self.adminrender("adminindex.html")
-#todo        
+        self.adminrender("adminindex.html")        
 class AdminNewProduct(AdminBaseHandler):
     def get(self):
-        
-        self.adminrender("adminindex.html")
+        categories = Category.getAllCategories()
+        self.adminrender("adminnewproduct.html", categories = categories)
+    def post(self):
+        if self.checkAdminCookie():
+            name = self.request.get("name")
+            category = self.request.get("category")
+            price = self.request.get("price")
+            try:
+                price = int(price)
+            except ValueError:
+                price = 0
+            description = self.request.get("description")
+            pictureurl = self.request.get("pictureurl")
+            Product.addProduct(name, price, category, description, pictureurl)
+            self.redirect("/admin/index")
+        else:
+            self.redirect("/admin/login")
 #todo
 class AdminEditProduct(AdminBaseHandler):
     def get(self):
