@@ -1,0 +1,60 @@
+{% extends "adminbase.html" %}
+{% block title %}Edit Product{% endblock %}
+{% block headline %}Edit Product{% endblock %}
+{% block main_content %}
+
+Current View:<br><br>
+Name: {{product.name}}<br>
+Price: {{product.price}}<br>
+Category {{category.name}}<br>
+Description {{product.description}}<br>
+PictureUrl {{product.pictureurl}} <br>
+<img src="{{product.pictureurl}}" alt="Pictureurl"><br>
+Published {{product.published}}<br>
+Last Edited: {{product.last_edited}}<br>
+Created {{product.created}}<br><br>
+<hr>
+Edit:<br>
+<form method="post">
+	<label>
+		Name
+		<input type="text" name = "name" value = "{{product.name}}">
+	</label>
+	<br>
+	<label>
+		Category
+		<select name="category" size = "1">
+			{% for categoryiter in categories %}
+				<option>{{categoryiter.name}}</option>
+			{% endfor %}
+			<option selected>{{category.name}}</option>
+		</select>
+	</label>
+	<br>
+	<label>
+		Price in <b>Cents</b>
+		<input type="text" name = "price" value = "{{product.price}}">
+	</label>
+	<br>
+	<label>
+		Description
+		<input type="text" name = "description" value = "{{product.description}}">
+	</label>
+	<br>
+	<label>
+		Picture URL
+		<input type="text" name = "pictureurl" value = "{{product.pictureurl}}">
+	</label>
+	<br>
+	<label>
+		Published
+		{% if product.published %}
+			<input type="checkbox" name = "published" checked>
+		{% else %}
+			<input type="checkbox" name = "published">
+		{% endif %}
+	</label>
+	<br>
+	<input type = "submit">
+</form>
+{% endblock %}

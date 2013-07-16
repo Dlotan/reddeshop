@@ -1,7 +1,7 @@
 import webapp2
 import jinja2
 import os
-#import logging
+import logging
 
 #from utils import *
 from database import Category,Product
@@ -69,9 +69,10 @@ class AdminNewCategory(AdminBaseHandler):
             self.redirect("/admin/login")
         
 #todo
-class AdminEditCategory(AdminBaseHandler):
+class AdminEditCategories(AdminBaseHandler):
     def get(self):
-        self.adminrender("adminindex.html")        
+        self.adminrender("adminindex.html")   
+             
 class AdminNewProduct(AdminBaseHandler):
     def get(self):
         categories = Category.getAllCategories()
@@ -87,12 +88,49 @@ class AdminNewProduct(AdminBaseHandler):
                 price = 0
             description = self.request.get("description")
             pictureurl = self.request.get("pictureurl")
-            Product.addProduct(name, price, category, description, pictureurl)
-            self.redirect("/admin/index")
+            product_key = Product.addProduct(name, price, category, description, pictureurl)
+            self.redirect("/admin/editproduct/%s" % product_key.id())
         else:
             self.redirect("/admin/login")
+            
 #todo
 class AdminEditProduct(AdminBaseHandler):
+    def get(self,product_id_string):
+        if product_id_string.isdigit():
+            product_id = int(product_id_string)
+            product = Product.getProductById(product_id)
+            category = Category.getCategoryById(product.category.id())
+            categories = Category.getAllCategories()
+            self.adminrender("admineditproduct.html",
+                             product = product,
+                             category = category,
+                             categories = categories)
+        else:
+            self.redirect("/admin/index")
+    def post(self,product_id_string):
+        if product_id_string.isdigit() and self.checkAdminCookie():
+            product_id = int(product_id_string)
+            name = self.request.get("name")
+            category = self.request.get("category")
+            price = self.request.get("price")
+            try:
+                price = int(price)
+            except ValueError:
+                price = 0
+            description = self.request.get("description")
+            pictureurl = self.request.get("pictureurl")
+            published = self.request.get("published")
+            if published == "on":
+                published = True
+            else:
+                published = False
+            Product.editProduct(product_id, name, price, category, description, pictureurl, published)
+            self.redirect("/admin/editproduct/%s" % product_id_string)
+        else:
+            self.redirect("/admin/index")
+        
+#todo
+class AdminEditProducts(AdminBaseHandler):
     def get(self):
         self.adminrender("adminindex.html")
             
@@ -100,7 +138,8 @@ app = webapp2.WSGIApplication([('/admin/*', AdminPage),
                                ('/admin/login', AdminLogin),
                                ('/admin/index', AdminIndex),
                                ('/admin/newcategory', AdminNewCategory),
-                               ('/admin/editcategory', AdminEditCategory),
+                               ('/admin/editcategory', AdminEditCategories),
                                ('/admin/newproduct', AdminNewProduct),
-                               ('/admin/editproduct', AdminEditProduct)
+                               ('/admin/editproduct/(\d+)',AdminEditProduct),
+                               ('/admin/editproduct', AdminEditProducts)
                                ], debug=True)
