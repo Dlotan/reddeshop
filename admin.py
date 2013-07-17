@@ -86,9 +86,7 @@ class AdminNewProduct(AdminBaseHandler):
                 price = int(price)
             except ValueError:
                 price = 0
-            description = self.request.get("description")
-            pictureurl = self.request.get("pictureurl")
-            product_key = Product.addProduct(name, price, category, description, pictureurl)
+            product_key = Product.addProduct(name, price, category)
             self.redirect("/admin/editproduct/%s" % product_key.id())
         else:
             self.redirect("/admin/login")
@@ -113,18 +111,19 @@ class AdminEditProduct(AdminBaseHandler):
             name = self.request.get("name")
             category = self.request.get("category")
             price = self.request.get("price")
-            try:
-                price = int(price)
-            except ValueError:
-                price = 0
             description = self.request.get("description")
             pictureurl = self.request.get("pictureurl")
-            published = self.request.get("published")
-            if published == "on":
-                published = True
-            else:
-                published = False
-            Product.editProduct(product_id, name, price, category, description, pictureurl, published)
+            position = self.request.get("position")
+            showcaseposition = self.request.get("showcaseposition")
+            try:
+                price = int(price)
+                position = int(position)
+                showcaseposition = int(showcaseposition)
+            except ValueError:
+                price = 0
+                position = -1
+                showcaseposition = -1
+            Product.editProduct(product_id, name, price, category, description, pictureurl, position, showcaseposition)
             self.redirect("/admin/editproduct/%s" % product_id_string)
         else:
             self.redirect("/admin/index")

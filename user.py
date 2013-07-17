@@ -4,7 +4,7 @@ import os
 #import logging
 
 #from utils import *
-#from database import *
+from database import Category,Product
 #from admin import *
 
 
@@ -23,7 +23,9 @@ class UserBaseHandler(webapp2.RequestHandler):
 
 class UserIndex(UserBaseHandler):
     def get(self):
-        self.render("userindex.html")
+        categories = Category.getAllCategories()
+        products = Product.getAllProductsOrderShowcaseposition()
+        self.render("userindex.html", categories = categories, products = products)
 
 
             

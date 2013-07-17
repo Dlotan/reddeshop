@@ -2,10 +2,14 @@ from google.appengine.ext import ndb
 
 class Category(ndb.Model):
     name = ndb.StringProperty(required = True)
+    position = ndb.IntegerProperty(default = 1)
     created = ndb.DateTimeProperty(auto_now_add=True)
     @classmethod
     def getAllCategories(cls):
         return cls.query()
+    @classmethod
+    def getAllCategoriesOrderPosition(cls):
+        return cls.query().order(Category.position)
     @classmethod
     def getCategoryByName(cls,name):
         return cls.query(Category.name == name).get()
@@ -22,6 +26,10 @@ class Category(ndb.Model):
     def getAllProducts(cls,categoryname):
         category = Category.getCategoryByName(categoryname)
         return Product.query(Product.category == category.key)
+    @classmethod
+    def getAllProductsOrderPosition(cls,categoryname):
+        category = Category.getCategoryByName(categoryname)
+        return Product.query(Product.category == category.key).filter(Product.position > -1).order(Product.position) #ndb.and ??!
         
     
 class Product(ndb.Model):
@@ -30,7 +38,8 @@ class Product(ndb.Model):
     price = ndb.IntegerProperty(required = True)
     description = ndb.TextProperty(required = False)
     pictureurl = ndb.StringProperty(required = False)
-    published = ndb.BooleanProperty(default=False, required = False)
+    position = ndb.IntegerProperty(default = -1) #position in category. -1 if not shown
+    showcaseposition = ndb.IntegerProperty(default = -1) #position on frontpage. -1 if not on frontpage
     last_edited = ndb.DateTimeProperty(auto_now=True)
     created = ndb.DateTimeProperty(auto_now_add=True)
     @classmethod
@@ -43,7 +52,7 @@ class Product(ndb.Model):
                           parent = ndb.Key(Category,'global'))
         return product.put()
     @classmethod
-    def editProduct(cls, product_id, name, price, category, description = "", pictureurl = "", published = False):
+    def editProduct(cls, product_id, name, price, category, description = "", pictureurl = "", position = -1, showcaseposition = -1):
         product = cls.get_by_id(product_id, ndb.Key(Category,'global'))
         category = Category.getCategoryByName(category)
         product.name = name
@@ -51,7 +60,8 @@ class Product(ndb.Model):
         product.category = category.key
         product.description = description
         product.pictureurl = pictureurl
-        product.published = published
+        product.position = position
+        product.showcaseposition = showcaseposition
         return product.put()
     @classmethod
     def getProductByName(cls,name):
@@ -59,6 +69,12 @@ class Product(ndb.Model):
     @classmethod
     def getProductById(cls,product_id):
         return cls.get_by_id(product_id, ndb.Key(Category,'global'))
+    @classmethod
+    def getAllProducts(cls):
+        return cls.query()
+    @classmethod
+    def getAllProductsOrderShowcaseposition(cls):
+        return cls.query(Product.showcaseposition > -1).order(Product.showcaseposition)
     
     
     

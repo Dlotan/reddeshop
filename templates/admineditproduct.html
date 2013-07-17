@@ -6,13 +6,14 @@
 Current View:<br><br>
 Name: {{product.name}}<br>
 Price: {{product.price}}<br>
-Category {{category.name}}<br>
-Description {{product.description}}<br>
-PictureUrl {{product.pictureurl}} <br>
+Category: {{category.name}}<br>
+Description: {{product.description}}<br>
+PictureUrl: {{product.pictureurl}} <br>
 <img src="{{product.pictureurl}}" alt="Pictureurl"><br>
-Published {{product.published}}<br>
+Position in Category: {{product.position}} (-1 = not shown)<br>
+Showcaseposition: {{product.showcaseposition}} (-1 = not shown)<br>
 Last Edited: {{product.last_edited}}<br>
-Created {{product.created}}<br><br>
+Created: {{product.created}}<br><br>
 <hr>
 Edit:<br>
 <form method="post">
@@ -24,8 +25,8 @@ Edit:<br>
 	<label>
 		Category
 		<select name="category" size = "1">
-			{% for categoryiter in categories %}
-				<option>{{categoryiter.name}}</option>
+			{% for category_iter in categories %}
+				<option>{{category_iter.name}}</option>
 			{% endfor %}
 			<option selected>{{category.name}}</option>
 		</select>
@@ -47,12 +48,13 @@ Edit:<br>
 	</label>
 	<br>
 	<label>
-		Published
-		{% if product.published %}
-			<input type="checkbox" name = "published" checked>
-		{% else %}
-			<input type="checkbox" name = "published">
-		{% endif %}
+		Position in Category
+		<input type="text" name = "position" value = "{{product.position}}">
+	</label>
+	<br>
+	<label>
+		Showcaseposition
+		<input type="text" name = "showcaseposition" value = "{{product.showcaseposition}}">
 	</label>
 	<br>
 	<input type = "submit">

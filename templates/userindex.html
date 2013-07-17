@@ -2,5 +2,16 @@
 {% block title %}Index{% endblock %}
 {% block headline %}Index{% endblock %}
 {% block main_content %}
-TESTCONTENT
+<h1>Categories:</h1><br>
+{% for category in categories %}
+	<a href="/category/{{category.name}}">{{category.name}}</a><br>
+{% endfor %}
+<hr>
+<h1>Products:</h1><br>
+{% for product in products %}
+	<h3><a href="/product/{{product.key.id()}}">{{product.name}}</a></h3>
+	<img src="{{product.pictureurl}}" alt="Pictureurl"><br>
+	Description: {{product.description}}
+	<hr>
+{% endfor %}
 {% endblock %}
