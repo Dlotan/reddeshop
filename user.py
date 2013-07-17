@@ -20,16 +20,29 @@ class UserBaseHandler(webapp2.RequestHandler):
         self.response.out.write(self.render_str(template, **kw))
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
+    def userrender(self, template, **kw):
+        categories = Category.getAllCategories()
+        self.render(template, categories = categories, **kw)
 
 class UserIndex(UserBaseHandler):
     def get(self):
-        categories = Category.getAllCategories()
         products = Product.getAllProductsOrderShowcaseposition()
-        self.render("userindex.html", categories = categories, products = products)
+        self.userrender("userindex.html", products = products)
+        
+class UserProduct(UserBaseHandler):
+    def get(self, product_id_string):
+        if product_id_string.isdigit():
+            product_id = int(product_id_string)
+            product = Product.getProductById(product_id)
+            category = Category.getCategoryById(product.category.id())
+            self.userrender("userproduct.html", product = product, category = category)
+        else:
+            self.redirect('/')
 
 
             
 app = webapp2.WSGIApplication([('/', UserIndex),
+                               ('/product/(\d+)',UserProduct)
                                ], debug=True)
 
 

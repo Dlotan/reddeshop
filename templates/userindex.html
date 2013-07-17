@@ -3,15 +3,17 @@
 {% block headline %}Index{% endblock %}
 {% block main_content %}
 <h1>Categories:</h1><br>
-{% for category in categories %}
-	<a href="/category/{{category.name}}">{{category.name}}</a><br>
+{% for category_iter in categories %}
+	<a href="/category/{{category_iter.name}}">{{category_iter.name}}</a><br>
 {% endfor %}
 <hr>
 <h1>Products:</h1><br>
 {% for product in products %}
 	<h3><a href="/product/{{product.key.id()}}">{{product.name}}</a></h3>
 	<img src="{{product.pictureurl}}" alt="Pictureurl"><br>
-	Description: {{product.description}}
+	Description: {{product.description}}<br>
+	{% set price = product.price / 100.0 %}
+	Price: {{'%0.2f'| format(price|float)}}
 	<hr>
 {% endfor %}
 {% endblock %}
