@@ -1,0 +1,13 @@
+{% extends "adminbase.html" %}
+{% block title %}Edit Products{% endblock %}
+{% block headline %}Edit Products{% endblock %}
+{% block main_content %}
+{% for product in products %}
+	<h3><a href="/admin/product/editproduct/{{product.key.id()}}">{{product.name}}</a></h3>
+	<img src="{{product.pictureurl}}" alt="Picture"><br>
+	Description: {{product.description}}<br>
+	{% set price = product.price / 100.0 %}
+	Price: {{'%0.2f'| format(price|float)}}
+	<hr>
+{% endfor %}
+{% endblock %}

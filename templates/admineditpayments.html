@@ -1,0 +1,55 @@
+{% extends "adminbase.html" %}
+{% block title %}Edit Payments{% endblock %}
+{% block headline %}Edit Payments{% endblock %}
+{% block main_content %}
+<table border = "1">
+<tr>
+	<th>Product Name</th>
+	<th>Subproduct</th>
+	<th>Price (Cents)</th>
+	<th>First Name</th>
+	<th>Last Name</th>
+	<th>Street Name</th>
+	<th>Street Number</th>
+	<th>PLZ</th>
+	<th>City</th>
+	<th>E-Mail</th>
+	<th>Created</th>
+	<th>Paymethod</th>
+	<th>State</th>
+	<th>Payed</th>
+	<th>Delete</th>
+	<th>Processing</th>
+	<th>Transit</th>
+	<th>Finished</th>
+	<th>Canceled</th>
+	<th>Payed</th>
+	<th>Not Payed</th>
+</tr>
+{% for paymentdict in paymentdicts %}
+<tr>
+	<td>{{paymentdict['product'].name}}</td>
+	<td>{{paymentdict['subproduct'].value}}</td>
+	<td>{{paymentdict['product'].price}}</td>
+	<td>{{paymentdict['contact'].first_name}}</td>
+	<td>{{paymentdict['contact'].last_name}}</td>
+	<td>{{paymentdict['contact'].street}}</td>
+	<td>{{paymentdict['contact'].street_number}}</td>
+	<td>{{paymentdict['contact'].plz}}</td>
+	<td>{{paymentdict['contact'].city}}</td>
+	<td>{{paymentdict['contact'].email}}</td>
+	<td>{{paymentdict['payment'].date}}</td>
+	<td>{{paymentdict['payment'].paymethod}}</td>
+	<td>{{paymentdict['payment'].state}}</td>
+	<td>{{paymentdict['payment'].payed}}</td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?comment=delete">Delete</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?comment=processing">Processing</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?comment=transit">Transit</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?comment=finished">Finished</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?comment=canceled">Canceled</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?comment=payed">Payed</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?comment=notpayed">Not Payed</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

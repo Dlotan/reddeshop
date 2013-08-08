@@ -1,19 +1,73 @@
 {% extends "userbase.html" %}
-{% block title %}Index{% endblock %}
-{% block headline %}Index{% endblock %}
+{% block title %}
+Madcats
+{% endblock %}
 {% block main_content %}
-<h1>Categories:</h1><br>
-{% for category_iter in categories %}
-	<a href="/category/{{category_iter.name}}">{{category_iter.name}}</a><br>
-{% endfor %}
-<hr>
-<h1>Products:</h1><br>
-{% for product in products %}
-	<h3><a href="/product/{{product.key.id()}}">{{product.name}}</a></h3>
-	<img src="{{product.pictureurl}}" alt="Pictureurl"><br>
-	Description: {{product.description}}<br>
-	{% set price = product.price / 100.0 %}
-	Price: {{'%0.2f'| format(price|float)}}
-	<hr>
-{% endfor %}
+  <div>
+    <div class="hero-bg">
+      <div class="w-container">
+        <h1 id="page-nav-Section-1">Madcats</h1>
+        <div class="subtitle">Online Shop</div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="w-container">
+      <div class="w-row">
+        <div class="w-col w-col-6">
+          <h4>Products</h4>
+          <div class="section-description">Ausgesuchte Produkte</div>
+        </div>
+        <div class="w-col w-col-6 right-col"></div>
+      </div>
+      {% set row_class = cycler('odd', 'even') %}
+      {% for product in products %}
+      	{% if row_class.next() is sameas 'odd' %}
+      		<div class="w-row snippet-row">
+      		<div class="w-col w-col-6">
+         	 <a class="w-clearfix w-inline-block snippet" href="/product/{{product.key.id()}}">
+            <div class="snippet-img" style="background-image: url({{product.pictureurl}});"></div>
+            <div class="snippet-text-section">
+              <div class="snippet-title">{{product.name}}</div>
+              {% set price = product.price / 100.0 %}
+              <div class="snippet-text">{{'%0.2f'| format(price|float)}} EUR</div>
+            </div>
+          </a>
+        </div>
+        {% else %}
+        	<div class="w-col w-col-6">
+         	 <a class="w-clearfix w-inline-block snippet" href="/product/{{product.key.id()}}">
+            <div class="snippet-img" style="background-image: url({{product.pictureurl}});"></div>
+            <div class="snippet-text-section">
+              <div class="snippet-title">{{product.name}}</div>
+              {% set price = product.price / 100.0 %}
+              <div class="snippet-text">{{'%0.2f'| format(price|float)}} EUR</div>
+            </div>
+          </a>
+        </div>
+        </div>
+      	{% endif %}
+      {% endfor %}
+      {% if row_class.next() is sameas 'even' %}
+      	</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="content-bg">
+    <div class="w-container">
+      <h2 id="page-nav-Section-2">Discover</h2>
+    </div>
+  </div>
+  <div class="section footer">
+    <div class="w-container">
+      <div class="w-row secondary-row">
+        <div class="w-col w-col-8 w-col-small-6">
+          <h4>Contact</h4>
+          <p>Bla bla Bla</p>
+        </div>
+        <div class="w-col w-col-4 w-col-small-6 button-column"><a class="button" href="#">Button Text</a>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

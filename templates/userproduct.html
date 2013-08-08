@@ -1,11 +1,23 @@
 {% extends "userbase.html" %}
-{% block title %}Product{% endblock %}
-{% block headline %}Product{% endblock %}
+{% block title %}
+Product
+{% endblock %}
 {% block main_content %}
-<h3>Name: {{product.name}}</h3>
-Category: {{category.name}}<br>
-<img src="{{product.pictureurl}}" alt="Pictureurl"><br>
-Description: {{product.description}}<br>
-{% set price = product.price / 100.0 %}
-Price: {{'%0.2f'| format(price|float)}} EUR
+  <div class="product-container">
+    <div class="w-container">
+      <div class="w-row">
+        <div class="w-col w-col-6">
+          <img src="{{product.pictureurl}}" alt="Produktbild :D">
+        </div>
+        <div class="w-col w-col-6 w-clearfix descriptioncolumn">
+          <h1>{{product.name}}</h1>
+          <p>{{product.description}}</p>
+          <div class="textblock">Versionen: {% for subproduct in subproducts %}{{subproduct.value}} {% endfor %}</div>
+          {% set price = product.price / 100.0 %}
+          <div class="textblock">{{'%0.2f'| format(price|float)}} EUR</div>
+          <a class="button" href="/buy/{{product.key.id()}}">Kaufen!</a>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

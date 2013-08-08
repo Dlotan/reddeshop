@@ -2,32 +2,46 @@
 
 <html>
   <head>
+  	<meta charset="utf-8">
     <title>
     	{% block title %}
     	{% endblock %}
     </title>
-    <link rel="stylesheet" type="text/css" href="/css/stylesuser.css">
-    {% block javascript %}
-    {% endblock %}
-  </head>
-  <body>
-    <div class = "headline">
-    	{% block headline %}
-    	{% endblock %}
+     <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/css/webflow.css">
+    <link rel="stylesheet" type="text/css" href="/css/reddeshop.webflow.css">
+    <!--<link rel="icon" type="image/x-icon" href="https://y7v4p6k4.ssl.hwcdn.net/placeholder/favicon.ico">-->
+    <link rel="apple-touch-icon" href="https://y7v4p6k4.ssl.hwcdn.net/51e081c5241660ce7800001f/51e755c7e48178d53e000034_thumbnail-starter.png">
+    <script type="text/javascript" src="js/webflow.js" defer></script>
+  </head><body>
+  <div class="section header">
+    <div class="w-container">
+      <div class="w-row">
+        <div class="w-col w-col-4 company-column">
+          <div class="company-title"><a class="company-title-link" href="/">Madcats</a></div>
+        </div>
+        <div class="w-col w-col-8 w-clearfix nav-bar">
+        {% for category_iter in categories %}
+        	<!--<a class="nav-link" href="/category/{{category_iter.name}}">{{category_iter.name}}</a>-->
+        {% endfor %}
+        </div>
+      </div>
     </div>
-    <div class = "topbar">
-		{% block topbar %}
-			<a href="/">Index</a>
-		{% endblock %}
-  	</div>
-    <br>
-    <div class = "maincontent">
+  </div>
     	{% block main_content %}
     	{% endblock %}
+    <div class="section">
+    <div class="w-container">
+      <div class="w-row">
+        <div class="w-col w-col-6 left-footer-col">
+          <div class="footer-text">© Madcats. All Rights Reserved.</div>
+        </div>
+        <div class="w-col w-col-6 footer-nav-bar"><a class="footer-link" href="/static/disclaimer.html">Disclaimer</a><a class="footer-link" href="/static/impressum">Impressum</a>
+        </div>
+      </div>
     </div>
-    <div class = "btm">
-    	<hr>
-    	Footer: about, faq, contact etc...
-    </div>
-  </body>
+  </div>
+</body>
 </html>

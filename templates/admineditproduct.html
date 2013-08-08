@@ -4,6 +4,7 @@
 {% block main_content %}
 
 Current View:<br><br>
+ID: {{product.key.id()}}<br>
 Name: {{product.name}}<br>
 Price: {{product.price}}<br>
 Category: {{category.name}}<br>
@@ -14,6 +15,9 @@ Position in Category: {{product.position}} (-1 = not shown)<br>
 Showcaseposition: {{product.showcaseposition}} (-1 = not shown)<br>
 Last Edited: {{product.last_edited}}<br>
 Created: {{product.created}}<br><br>
+<hr>
+<a href="/admin/product/{{product.key.id()}}/addsubproduct">Add SubProduct</a><br>
+<a href="/admin/product/{{product.key.id()}}/editsubproducts">Edit SubProducts</a><br>
 <hr>
 Edit:<br>
 <form method="post">

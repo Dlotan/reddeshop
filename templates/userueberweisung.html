@@ -1,0 +1,16 @@
+{% extends "userbase.html" %}
+{% block title %}
+Status
+{% endblock %}
+{% block main_content %}
+  <div class="pay-container">
+    <div class="w-container">
+      <div class="w-row">
+      	Vielen Dank, dass sie das Produkt: {{product.name}} in der Ausfuehrung {{subproduct.value}} bei uns gekauft haben.<br>
+      	{% set price = product.price / 100.0 %}
+      	Bitte Ueberweisen sie den Betrag von {{'%0.2f'| format(price|float)}} EUR and das Konto: (KONTO)<br>
+      	<a href="/status/{{payment.key.id()}}">Bestellstatus</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

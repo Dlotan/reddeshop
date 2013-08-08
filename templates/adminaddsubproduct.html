@@ -1,0 +1,19 @@
+{% extends "adminbase.html" %}
+{% block title %}Add Sub Product{% endblock %}
+{% block headline %}Add Sub Product{% endblock %}
+{% block main_content %}
+Product ID: {{product.key.id()}}<br>
+Product Name: {{product.name}}<br>
+SubProducts:<br>
+{% for subproduct in subproducts %}
+	{{subproduct.value}}<br>
+{% endfor %}
+<hr>
+<form method = "post">
+	<label>
+		Value
+		<input type="text" name = "value" value = "">
+	</label>
+	<input type = "submit">
+</form>
+{% endblock %}
