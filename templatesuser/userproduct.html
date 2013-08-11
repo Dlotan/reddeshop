@@ -1,0 +1,46 @@
+{% extends "userbase.html" %}
+{% block title %}
+Product
+{% endblock %}
+{% block main_content %}
+  <div class="product-container">
+    <div class="w-container">
+      <div class="w-row">
+        <div class="w-col w-col-6">
+          <img src="{{product.pictureurl}}" alt="Produktbild :D">
+          <br>
+          <br>
+        </div>
+        <div class="w-col w-col-6 w-clearfix descriptioncolumn">
+        <div class ="product-name-box">
+          <h1 class = "product-name">{{product.name}}</h1>
+        </div>
+          <p>{{product.description}}</p>
+          <div class="textblock">Sizes: <ul>
+          {% for subproduct in subproducts %}
+          	<li>
+          	{% if subproduct.available == False %}
+          		<s>&nbsp;
+          	{% else %}
+          	&nbsp;
+          	{% endif %}
+          	{{subproduct.value}}
+          	{% if subproduct.available == False %}
+          	&nbsp;</s>
+          		 &nbsp;<div class ="soldout"><i>sold out</i></div>
+          	{% endif %}
+          	</li>
+          {% endfor %}</ul></div>
+          {% set price = product.price / 100.0 %}
+          <div class="textblock">{{'%0.2f'| format(price|float)}} EUR</div><br>
+          <div class = "buttonbox">
+          	<a class="button" href="/buy/{{product.key.id()}}">Kaufen / Size w&auml;hlen</a><br><br>
+          	<!-- <a class="button" href="/buy/{{product.key.id()}}">In Einkaufswagen</a> -->
+          </div>
+          <br>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

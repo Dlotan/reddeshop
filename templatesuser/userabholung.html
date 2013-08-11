@@ -1,0 +1,19 @@
+{% extends "userbase.html" %}
+{% block trackingcode %}
+{% endblock %}
+{% block title %}
+Abholung
+{% endblock %}
+{% block main_content %}
+  <div class="pay-container">
+    <div class="w-container">
+      <div class="w-row">
+      	Vielen Dank {{contact.first_name}}, dass Du das Produkt: {{product.name}} in der Ausf&uuml;hrung {{subproduct.value}} bei uns gekauft hast.<br>
+      	Bitte vereinbare einen Termin unter <a href="mailto:larissagoeb@gmail.com">larissagoeb@gmail.com</a>.<br><br>
+      	{% set price = (product.price / 100.0) + (contact.shipping_cost /100.0) %}
+      	Der Preis betr&auml;gt: {{'%0.2f'| format(price|float)}} EUR<br><br>
+      	<a href="/status/{{payment.key.id()}}">Bestellstatus</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -5,14 +5,25 @@
 Product ID: {{product.key.id()}}<br>
 Product Name: {{product.name}}<br>
 SubProducts:<br>
+<table border = "1">
+<tr>
+	<th>Value</th><th>Position</th>
+</tr>
 {% for subproduct in subproducts %}
-	{{subproduct.value}}<br>
+<tr>
+	<td>{{subproduct.value}}</td><td>{{subproduct.position}}</td>
+</tr>
 {% endfor %}
+</table>
 <hr>
 <form method = "post">
 	<label>
 		Value
 		<input type="text" name = "value" value = "">
+	</label><br>
+	<label>
+		Position
+		<input type="text" name = "position" value = "">
 	</label>
 	<input type = "submit">
 </form>

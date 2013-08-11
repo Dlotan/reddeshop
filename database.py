@@ -1,4 +1,6 @@
 from google.appengine.ext import ndb
+from datetime import datetime
+import logging
 
 class Category(ndb.Model):
     name = ndb.StringProperty(required = True)
@@ -75,31 +77,50 @@ class Product(ndb.Model):
     def getAllProductsOrderShowcaseposition(cls):
         return cls.query(Product.showcaseposition > -1).order(Product.showcaseposition)
     @classmethod
-    def addSubProduct(cls, product_id, value):
+    def addSubProduct(cls, product_id, value, position):
         product = cls.get_by_id(product_id, ndb.Key(Category,'global'))
         subproduct = SubProduct(product = product.key,
                                 value = value,
+                                position = position,
                                 parent = ndb.Key(Category,'global'))
         return subproduct.put()
     @classmethod
     def getSubProducts(cls, product_id):
         product = cls.get_by_id(product_id, ndb.Key(Category,'global'))
-        return SubProduct.query(SubProduct.product == product.key)
+        subproducts = SubProduct.query(SubProduct.product == product.key)
+        subproducts = [subproduct for subproduct in subproducts if subproduct.position >= 0]
+        subproducts = sorted(subproducts, key = lambda subproduct: subproduct.position)
+        return subproducts
+    @classmethod
+    def getAvailableSubProducts(cls, product_id):
+        product = cls.get_by_id(product_id, ndb.Key(Category,'global'))
+        subproducts = SubProduct.query(SubProduct.product == product.key, SubProduct.available == True)
+        subproducts = [subproduct for subproduct in subproducts if subproduct.position >= 0]
+        subproducts = sorted(subproducts, key = lambda subproduct: subproduct.position)
+        return subproducts
     @classmethod
     def getSubProductByName(cls, product_id, subproduct_value):
-        subproduct = cls.getSubProducts(product_id).filter(SubProduct.value == subproduct_value).get()
-        return subproduct
+        return [subproduct for subproduct in cls.getSubProducts(product_id) if subproduct.value == subproduct_value and subproduct.position >= 0][0]
     
 class SubProduct(ndb.Model):
-    product = ndb.KeyProperty(required = True)
+    product = ndb.KeyProperty(kind = 'Product',required = True)
     value = ndb.StringProperty(required = True)
+    position = ndb.IntegerProperty(required = True)
+    available = ndb.BooleanProperty(default = True)
     @classmethod
     def getSubProductById(cls, subproduct_id):
-        return cls.get_by_id(subproduct_id, ndb.Key(Category,'global'))
+        subproduct = cls.get_by_id(subproduct_id, ndb.Key(Category,'global'))
+        return subproduct
     @classmethod
     def deleteSubProduct(cls, subproduct_id):
         subproduct = cls.getSubProductById(subproduct_id)
-        subproduct.key.delete()
+        subproduct.position = -1
+        subproduct.put()
+    @classmethod
+    def setAvailability(cls, subproduct_id, availability):
+        subproduct = cls.getSubProductById(subproduct_id)
+        subproduct.available = availability
+        return subproduct.put()
     @classmethod
     def getProduct(cls, subproduct_id):
         subproduct = cls.get_by_id(subproduct_id, ndb.Key(Category,'global'))
@@ -113,7 +134,10 @@ class Contact(ndb.Model):
     street_number = ndb.StringProperty(required = True)
     plz = ndb.StringProperty(required = True)
     city = ndb.StringProperty(required = True)
+    country = ndb.StringProperty(required = True)
+    shipping_region = ndb.StringProperty(choices = ["germany","eu","worldwide"],default = "germany")
     email = ndb.StringProperty(required = True)
+    shipping_cost = ndb.ComputedProperty(lambda self: getShippingCost(self.shipping_region))
     @classmethod
     def addContact(cls, params):
         contact = Contact(first_name = params['first_name'],
@@ -122,7 +146,9 @@ class Contact(ndb.Model):
                           street_number = params['street_number'],
                           plz = params['plz'],
                           city = params['city'],
+                          shipping_region = params['shipping_region'],
                           email = params['email'],
+                          country = params['country'],
                           parent = ndb.Key(Category,'global'))
         return contact.put()
     @classmethod
@@ -132,13 +158,24 @@ class Contact(ndb.Model):
     def deleteContact(cls, contact_id):
         contact = cls.getContactById(contact_id)
         contact.key.delete()
+def getShippingCost(shipping_region):
+    if shipping_region == "germany":
+        return 0
+    elif shipping_region == "eu":
+        return 700
+    else:
+        return 1500
+    
+        
+#class Cart(ndb.Model):
+#    subproducts = ndb.KeyProperty(kind = 'SubProduct', required = True)
     
     
 class Payment(ndb.Model):
-    subproduct = ndb.KeyProperty(required = True)
-    contact = ndb.KeyProperty(required = True)
+    subproduct = ndb.KeyProperty(kind = 'SubProduct',required = True)
+    contact = ndb.KeyProperty(kind = 'Contact',required = True)
     date = ndb.DateTimeProperty(auto_now_add=True)
-    paymethod = ndb.StringProperty(choices = ["paypal", "persoehnlich", "ueberweisung"], required = True)
+    paymethod = ndb.StringProperty(choices = ["paypal", "persoenlich", "ueberweisung"], required = True)
     state = ndb.StringProperty(choices = ["processing","transit","finished","canceled"], default = "processing")
     payed = ndb.BooleanProperty(default = False)
     @classmethod
@@ -170,6 +207,7 @@ class Payment(ndb.Model):
     def getActivePaymentDicts(cls):
         mylist = []
         payments = cls.query(Payment.state != "finished")
+        payments = sorted(payments, key = lambda payment: payment.date)
         for payment in payments:
             params = {}
             params['payment'] = payment
@@ -193,6 +231,18 @@ class Payment(ndb.Model):
         payment = cls.getPaymentById(payment_id)
         payment.payed = payed
         payment.put()
+    @classmethod
+    def getSumPrice(cls, payment_id):
+        payment = cls.getPaymentById(payment_id)
+        contact = cls.getContact(payment_id)
+        shipping_cost = contact.shipping_cost
+        product_price = SubProduct.getProduct(payment.subproduct.id()).price
+        return shipping_cost + product_price
+    @classmethod
+    def getShippingCost(cls, payment_id):
+        payment = cls.getPaymentById(payment_id)
+        contact = cls.getContact(payment_id)
+        return contact.shipping_cost
         
 class TXNStore(ndb.Model):
     txn_id = ndb.StringProperty(required = True)

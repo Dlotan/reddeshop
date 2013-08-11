@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+  	<meta charset="utf-8">
+    <title>
+    	{% block title %}
+    	{% endblock %}
+    </title>
+     <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/css/webflow.css">
+    <link rel="stylesheet" type="text/css" href="/css/reddeshop.webflow.css">
+    <link rel="icon" type="image/x-icon" href="http://dlotanspielewiese.appspot.com/images/favicon.ico">
+    <link rel="apple-touch-icon" href="https://y7v4p6k4.ssl.hwcdn.net/51e081c5241660ce7800001f/51e755c7e48178d53e000034_thumbnail-starter.png">
+    <script type="text/javascript" src="/js/webflow.js" defer></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    {% block trackingcode %}
+    <script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	
+	  ga('create', 'UA-43105426-1', 'madcatsclothing.com');
+	  ga('send', 'pageview');
+	
+	</script>
+	{% endblock %}
+    {% block javascript %}
+    {% endblock %}
+  </head><body>
+  <div class="section header">
+    <div class="w-container">
+      <div class="w-row">
+        <div class="w-col w-col-4 company-column">
+          <div class="company-title"><a class="company-title-link" href="/index"><img src="http://dlotanspielewiese.appspot.com/images/logo_invert.jpg"></a></div>
+        </div>
+        <div class="w-col w-col-8 w-clearfix nav-bar">
+        	<b>Versandkostenfrei</b> innerhalb Deutschlands
+        {% for category_iter in categories %}
+        	<!--<a class="nav-link" href="/category/{{category_iter.name}}">{{category_iter.name}}</a>-->
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+    	{% block main_content %}
+    	{% endblock %}
+    <div class="section footer">
+    <div class="w-container">
+      <div class="w-row">
+        <div class="w-col w-col-4 left-footer-col">
+          <div class="footer-text">© Madcats. All Rights Reserved.</div>
+        </div>
+        <div class="w-col w-col-4 footer-mid">
+        	<a href = "https://www.facebook.com/pages/madcats/174921669246314" target="_blank" class = "icon">
+        		<img src = "http://dlotanspielewiese.appspot.com/images/Facebook.png" class = "icon-picture">
+        	</a>
+        	<a href= "mailto:larissagoeb@gmail.com" class = "email-icon icon">
+        		<img src = "http://dlotanspielewiese.appspot.com/images/email.png" class = "icon-picture">
+        	</a>
+        	<a href="/" target="_blank" class = "instagram-icon icon">
+        		<img src = "http://dlotanspielewiese.appspot.com/images/Instagram.png" class = "icon-picture">
+        	</a>
+        </div>
+        <div class="w-col w-col-4 footer-nav-bar"><a class="footer-link" href="/static/disclaimer.html"><b>Disclaimer</b></a><a class="footer-link" href="/static/impressum.html"><b>Impressum</b></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

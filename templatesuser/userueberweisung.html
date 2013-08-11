@@ -1,0 +1,42 @@
+{% extends "userbase.html" %}
+{% block trackingcode %}
+{% endblock %}
+{% block title %}
+&Uuml;berweisung
+{% endblock %}
+{% block main_content %}
+  <div class="pay-container">
+    <div class="w-container">
+      <div class="w-row">
+      	Vielen Dank {{contact.first_name}}, dass Du das Produkt: {{product.name}} in der Size {{subproduct.value}} bei uns gekauft hast.<br>
+      	{% set price = (product.price / 100.0) + (contact.shipping_cost /100.0) %}
+      	Bitte &Uuml;berweise den Betrag von {{'%0.2f'| format(price|float)}} EUR an das Konto:<br><br>
+      	<table border = "0">
+      	<tr>
+	     	<td>Kontoinhaber:</td><td>Larissa G&ouml;b</td>
+	    </tr>
+	    <tr>
+	     	<td>Kontonummer:</td><td>1000601941</td>
+	    </tr>
+	    <tr>
+	     	<td>Bankleitzahl:</td><td>60350130</td>
+	    </tr>
+	    <tr>
+	     	<td>Bank:</td><td>Kreissparkasse B&ouml;blingen</td>
+	    </tr>
+	    <tr>
+			<td>IBAN:</td><td>DE41 6035 0130 1000 6019 41</td>
+		</tr>
+	    <tr>
+			<td>BIC:</td><td>BBKRDE6BXXX</td>
+		</tr>
+	    <tr>
+			<td>Verwendungszweck:</td><td>{{payment.key.id()}}</td>
+		</tr>
+		</table>
+		<br><br>
+      	<a href="/status/{{payment.key.id()}}">Bestellstatus</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

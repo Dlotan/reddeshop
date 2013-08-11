@@ -1,0 +1,70 @@
+{% extends "adminbase.html" %}
+{% block title %}Edit Payments{% endblock %}
+{% block headline %}Edit Payments{% endblock %}
+{% block main_content %}
+<table border = "1">
+<tr>
+	<th>Product Name</th>
+	<th>Subproduct</th>
+	<th>Price (Cents)</th>
+	<th>First Name</th>
+	<th>Last Name</th>
+	<th>Street Name</th>
+	<th>Street Number</th>
+	<th>PLZ</th>
+	<th>City</th>
+	<th>Country</th>
+	<th>Shipping Region</th>
+	<th>E-Mail</th>
+	<th>Created</th>
+	<th>Paymethod</th>
+	<th>State</th>
+	<th>Payed</th>
+	<th>Delete</th>
+	<th>Processing</th>
+	<th>Transit</th>
+	<th>Finished</th>
+	<th>Canceled</th>
+	<th>Payed</th>
+	<th>Not Payed</th>
+</tr>
+{% for paymentdict in paymentdicts %}
+<tr>
+	<td>{{paymentdict['product'].name}}</td>
+	<td>{{paymentdict['subproduct'].value}}</td>
+	{% set price =  paymentdict['product'].price + paymentdict['contact'].shipping_cost %}
+	<td>{{price}}</td>
+	<td>{{paymentdict['contact'].first_name}}</td>
+	<td>{{paymentdict['contact'].last_name}}</td>
+	<td>{{paymentdict['contact'].street}}</td>
+	<td>{{paymentdict['contact'].street_number}}</td>
+	<td>{{paymentdict['contact'].plz}}</td>
+	<td>{{paymentdict['contact'].city}}</td>
+	<td>{{paymentdict['contact'].country}}</td>
+	<td>{{paymentdict['contact'].shipping_region}}</td>
+	<td>{{paymentdict['contact'].email}}</td>
+	<td>{{paymentdict['payment'].date}}</td>
+	<td>{{paymentdict['payment'].paymethod}}</td>
+	{% if paymentdict['payment'].state == "processing" %}
+	<td style="background-color:PaleVioletRed;">
+	{% else %}
+	<td style="background-color:lightgreen;">
+	{% endif %}
+	{{paymentdict['payment'].state}}</td>
+	{% if paymentdict['payment'].payed == True %}
+	<td style="background-color:lightgreen;">
+	{% else %}
+	<td style="background-color:PaleVioletRed;">
+	{% endif %}
+	{{paymentdict['payment'].payed}}</td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?command=delete">Delete</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?command=processing">Processing</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?command=transit">Transit</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?command=finished">Finished</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?command=canceled">Canceled</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?command=payed">Payed</a></td>
+	<td><a href = "/admin/payment/{{paymentdict['payment'].key.id()}}?command=notpayed">Not Payed</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

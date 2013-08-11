@@ -1,0 +1,115 @@
+{% extends "userbase.html" %}
+{% block title %}
+MADCATS
+{% endblock %}
+{% block javascript %}
+<script>
+$(document).ready(function(){
+  $('a[href*="#"]').click(function(event){
+    if (window.location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && window.location.hostname == this.hostname) {
+      var hasharr = $(this).attr('href').split('#');
+      if(hasharr[1].length > 1){
+        if(window.location.hash == '#to-'+(hasharr[1])){
+          $(window).hashchange(event);
+        } else {
+          window.location.hash = '#to-'+(hasharr[1]);
+          if($.browser.msie && $.browser.version <= 7){
+            $(window).hashchange(event);
+          }
+        }
+        event.preventDefault();
+        return false;
+      }
+    }
+  });
+  $(window).bind('hashchange', function(event){
+    $(this).hashchange(event);
+  });
+  $.fn.hashchange = function(event){
+    if(window.location.hash.length > 4 && window.location.hash.substr(0, 4) == '#to-'){
+      var hash = window.location.hash.substr(4);
+      if($('#'+hash).length > 0){
+        var targetOffset = $('#'+hash).offset().top;
+        var windowHeight = $(window).height();
+        var documentHeight = $(document).height();
+        var addSpace = 40; // Um einen Abstand vor der Position zu erzeugen - sonst 0 setzen
+        targetOffset = targetOffset+windowHeight < (documentHeight-addSpace) ? (targetOffset-addSpace) : documentHeight-windowHeight;
+        $('html, body').animate({'scrollTop': targetOffset}, parseInt(200+Math.abs(targetOffset-$(window).scrollTop())*0.25));
+        if(event){event.preventDefault();}
+        return false;
+      }
+    }
+  }
+  if(window.location.pathname.length > 1){
+    if(window.location.hash.length > 4 && window.location.hash.substr(0, 4) == '#to-'){
+      $(window.location.hash).hashchange(false);
+    } else if(window.location.hash.length > 1) {
+      window.location.hash = '#to-'+(window.location.hash.substr(1));
+      if($.browser.msie && $.browser.version <= 7){
+        $(window).hashchange(event);
+      }
+    }
+  }
+)};
+</script>
+{% endblock %}
+{% block main_content %}
+  <div>
+    <div class="hero-bg">
+      <div class="w-container">
+        <h1 id="page-nav-Section-1" class = "blub"><a href = "#section" class = "store-link">store</a></h1>
+        <div class="subtitle"><!--Online Shop--></div>
+      </div>
+    </div>
+  </div>
+  <div class="section" name="section">
+    <div class="w-container" id = "section">
+      <div class="w-row">
+        <div class="w-col w-col-6">
+          <h4>Products</h4>
+          <div class="section-description">Ausgesuchte Produkte</div>
+        </div>
+        <div class="w-col w-col-6 right-col"></div>
+      </div>
+      {% set row_class = cycler('one', 'two', 'three') %}
+      {% for product in products %}
+      	{% if row_class.next() == 'one' %}
+      		<div class="w-row snippet-row">
+      	{% endif %}
+      		<div class="w-col w-col-4">
+         	 <a class="w-clearfix w-inline-block snippet" href="/product/{{product.key.id()}}">
+            <div class="snippet-img" style="background-image: url({{product.pictureurl}});"></div>
+            <div class="snippet-text-section">
+              <div class="snippet-title">{{product.name}}</div>
+              {% set price = product.price / 100.0 %}
+              <div class="snippet-text">{{'%0.2f'| format(price|float)}} EUR</div>
+            </div>
+          </a>
+        </div>
+        {% if row_class.current == 'one' %}
+        </div>
+      	{% endif %}
+      {% endfor %}
+      {% if row_class.current != 'one' %}
+      	</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="content-bg">
+    <div class="w-container">
+      <!-- <h2 id="page-nav-Section-2">Discover</h2> -->
+    </div>
+  </div><!--
+  <div class="section footer">
+    <div class="w-container">
+      <div class="w-row secondary-row">
+        <div class="w-col w-col-8 w-col-small-6">
+          <h4>Contact</h4>
+          <p>Bla bla Bla</p>
+        </div>
+        <div class="w-col w-col-4 w-col-small-6 button-column"><a class="button" href="#">Button Text</a>
+        </div>
+      </div>
+    </div>
+  </div>-->
+{% endblock %}

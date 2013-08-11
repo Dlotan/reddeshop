@@ -2,13 +2,42 @@
 {% block title %}
 Buy
 {% endblock %}
+{% block javascript %}
+	<script>
+		$(document).ready(function(){
+			var product_price_string = $('#productprice').attr('price')
+			var shipping_cost_string = $('#country').find(':selected').attr('shipping_cost')
+			$('#shippingcost').text(shipping_cost_string + ' EUR')
+			$('#sumcost').text(parseFloat(shipping_cost_string) + parseFloat(product_price_string) + ' EUR')
+		  	$('#country').on('change', function() {
+				var product_price_string = $('#productprice').attr('price')
+				var shipping_cost_string = $(this).find(':selected').attr('shipping_cost')
+				$('#shippingcost').text(shipping_cost_string + ' EUR')
+				$('#sumcost').text((parseFloat(shipping_cost_string) + parseFloat(product_price_string)) + ' EUR')
+			});
+		});
+	</script>
+{% endblock %}
 {% block main_content %}
-  <div class="pay-container">
+  <div class="buy-container">
     <div class="w-container">
       <div class="w-row">
       Produkt Name: {{product.name}}<br>
       {% set price = product.price / 100.0 %}
-      Produkt Preis: {{'%0.2f'| format(price|float)}} EUR
+      <table border = "0">
+      <tr>
+      	<td>Produkt Preis: </td><td><div id="productprice" price="{{'%0.2f'| format(price|float)}}">{{'%0.2f'| format(price|float)}} EUR</div></td>
+      </tr>
+      <tr>
+      	<td>Versandkosten:</td><td><div id="shippingcost">0.00 EUR</div></td>
+      <tr>
+       	<td>----------</td><td>-----------</td>
+      </tr>
+      <tr>
+      	<td>Gesamt:</td><td><div id="sumcost">0.00 EUR</div></td>
+      </tr>
+      </tr>
+      </table>
       <br><br>
         <form method="post">
         <table border="0">
@@ -31,6 +60,9 @@ Buy
 			<td>Stadt</td><td><input type="text" name = "city" value = "{{params['city']}}"></td><td class="error">{{params['city_error']}}</td>
 			</tr>
 			<tr>
+			<td>Land</td><td><input type="text" name = "country" value = "{{params['country']}}"></td><td class="error">{{params['country_error']}}</td>
+			</tr>
+			<tr>
 			<td>E-Mail</td><td><input type="text" name = "email" value = "{{params['email']}}"></td><td class="error">{{params['email_error']}}</td>
 			</tr>
 			<tr>
@@ -38,7 +70,15 @@ Buy
 			</tr>
 		</table>
 		<br>
-		Version:
+		Shipping:
+		<select name="shipping_region" size="1" id="country">
+			<option value = "germany" shipping_cost = "0.00">Deutschland +0.00 EUR</option>
+			<option value = "eu" shipping_cost = "7.00">EU +7.00 EUR</option>
+			<option value = "worldwide" shipping_cost = "15.00">Worldwide +15.00 EUR</option>
+		</select>
+		<br>
+		<br>
+		Size:
 		<select name="subproduct_name" size="1">
 			{% for subproduct in subproducts %}
 				<option>{{subproduct.value}}</option>
@@ -50,11 +90,13 @@ Buy
 		Bezahlart:<br>
 		<input type="radio" name="paymethod" value="paypal" checked> Paypal<br>
 		<input type="radio" name="paymethod" value="ueberweisung"> Ueberweisung<br>
-		<input type="radio" name="paymethod" value="persoehnlich"> Persoehnlich<br>
+		<input type="radio" name="paymethod" value="persoenlich"> Persoenlich Dagersheim<br>
 		{{params['paymethod_error']}}
 		<br>
 		<input type="submit">
         </form>
+        <br>
+        <br>
       </div>
     </div>
   </div>

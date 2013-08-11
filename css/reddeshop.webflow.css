@@ -1,8 +1,13 @@
+html{
+	height:100%;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: #333;
   font-size: 12px;
   line-height: 20px;
+  height: 100%;
 }
 h1 {
   display: inline-block;
@@ -11,11 +16,12 @@ h1 {
   margin-left: 0px;
   padding: 9px 13px;
   background-color: rgba(0, 0, 0, 0.49);
-  font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family:'lucida grande','Helvetica Neue', Helvetica, Arial;
   color: white;
   font-size: 38px;
   line-height: 44px;
-  font-weight: 700;
+  font-weight: 100;
+  letter-spacing: 5px;
 }
 h2 {
   display: inline-block;
@@ -66,13 +72,19 @@ h6 {
 }
 p {
   margin-bottom: 15px;
-  font-size: 14px;
 }
 img {
   display: inline-block;
   height: auto;
   max-width: 100%;
   vertical-align: middle;
+}
+ul{
+	list-style: square;
+}
+s{
+	display: inline-block;
+	width: 55px;
 }
 .button {
   display: inline-block;
@@ -86,9 +98,13 @@ img {
   color: white;
   text-align: center;
   text-decoration: none;
+  min-width: 40%;
 }
 .button:hover {
   background-color: #008cff;
+}
+.buttonbox{
+	text-align: center;
 }
 .section {
   padding-top: 43px;
@@ -101,10 +117,12 @@ img {
   z-index: 1;
   padding-top: 28px;
   padding-bottom: 28px;
-  background-color: #333;
+  background-color: black;
 }
 .section.footer {
-  background-color: #f2f2f2;
+  background-color: black;
+  width: 100%;
+  position: relative;
 }
 .nav-link {
   margin-right: 5px;
@@ -150,21 +168,33 @@ img {
   padding-right: 0px;
   padding-left: 0px;
   text-align: right;
+  font-size: 15px;
+  margin-top: 14px;
+  color: white;
 }
 .hero-bg {
   width: auto;
   min-height: 500px;
   padding-top: 334px;
-  background-image: url(/images/example-bg.png);
+  background: url(http://dlotanspielewiese.appspot.com/images/Background1.jpg) no-repeat;
   background-size: 100%
 }
 .hero-bg.content {
   min-height: 420px;
   padding-top: 316px;
-  background-image: url(/images/example-bg.png);
   background-attachment: fixed;
   background-size: 100%
 }
+.store-link{
+	text-decoration: none;
+	text-transform: none;
+	color: #eeeeee;
+}
+
+.blub:hover{
+	background-color: rgba(0, 0, 0, 0.65);
+}
+
 .subtitle {
   margin-bottom: 18px;
   -webkit-transform: none;
@@ -181,9 +211,12 @@ img {
 .section-description {
   font-size: 14px;
 }
+.section-products {
+  display: block;
+}
 .snippet-img {
-  width: auto;
-  height: 219px;
+  width: 300px;
+  height: 440px;
   float: none;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -202,6 +235,7 @@ img {
   transition: all 200ms ease;
   color: black;
   text-decoration: none;
+  width: 300px
 }
 .snippet:hover {
   background-color: #e8e8e8;
@@ -267,23 +301,38 @@ img {
   margin-bottom: 34px;
 }
 .footer-link {
-  margin-right: 9px;
-  margin-left: 9px;
-  color: #008cff;
+  margin-left: 20px;
+  color: white;
   font-size: 14px;
+  letter-spacing: .3em;
   text-decoration: none;
 }
 .footer-nav-bar {
   text-align: right;
+  position: relative;
+  margin-top: 14px;
 }
+
+.footer-mid{
+	text-align: center;
+}
+
+.left-footer-col{
+	text-align: center;
+}
+
 .footer-text {
+  width: 100%;
   font-size: 14px;
+  color:white;
+  font-weight: 100;
+  position: relative;
+  margin-top: 14px;
 }
 .content-bg {
   min-height: 420px;
   padding-top: 292px;
-  background-color: lightgrey;
-  background-image: url(/images/example-bg.png);
+  background-image: url(http://dlotanspielewiese.appspot.com/images/fillbackground2.jpg);
   background-attachment: fixed;
   background-size: 100%
 }
@@ -293,159 +342,68 @@ img {
   margin-top: 26px;
 }
 
+.product-name{
+	background-color:black;
+}
+
+.product-name-box{
+	text-align: center;
+}
+
 .pay-container{
 	height: auto;
-	margin-top: 26px;
+	margin-top: 70px;
+	min-height: 70%;
+	font-size: 17px;
 }
+
+.soldout{
+	display: inline-block;
+	color:grey;
+}
+
+.buy-container{
+	height: auto;
+	margin-top: 70px;
+	min-height: 70%;
+	font-size: 17px;
+}
+
+.status-container{
+	height: auto;
+	margin-top: 70px;
+	min-height: 70%;
+	font-size: 17px;
+}
+
 .descriptioncolumn {
   height: 100%;
 }
+
+.icon{
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	padding-top: 9px;
+  	border-radius: 50px;
+  	background-color: black;
+  	-webkit-transition: all 200ms ease;
+  	-o-transition: all 200ms ease;
+  	transition: all 200ms ease;
+}
+
+.icon:hover{
+	background-color: DarkBlue;
+}
+
+.icon-picture{
+	margin-top:-10px
+}
+
 .textblock {
   margin-top: 44px;
+  font-size: 17px;
 }
 .error {
 	color:red;
-}
-
-@media (max-width: 991px) {
-  .button {
-    -webkit-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease;
-  }
-  .hero-bg {
-    background-image: url(/images/example-bg.png);
-  }
-  .hero-bg.content {
-    background-image: url(/images/example-bg.png);
-  }
-  .snippet-img {
-    height: 166px;
-  }
-  .snippet {
-    -webkit-transform: none;
-    -ms-transform: none;
-    -o-transform: none;
-    transform: none;
-    -webkit-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease;
-  }
-  .content-bg {
-    background-image: url(/images/example-bg.png);
-  }
-}
-@media (max-width: 767px) {
-  .button {
-    margin-bottom: 33px;
-    padding: 29px 30px;
-    -webkit-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease;
-    font-size: 16px;
-    font-weight: 700;
-  }
-  .section.header {
-    background-color: #333;
-  }
-  .nav-link {
-    background-color: #6b6b6b;
-    -webkit-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease;
-  }
-  .nav-link:hover {
-    -webkit-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease;
-  }
-  .company-title {
-    margin-bottom: 33px;
-  }
-  .nav-bar {
-    text-align: center;
-  }
-  .hero-bg {
-    min-height: 390px;
-    padding-top: 238px;
-    padding-right: 11px;
-    padding-left: 11px;
-    background-image: url(/images/example-bg.png);
-  }
-  .hero-bg.content {
-    min-height: 290px;
-    padding-top: 205px;
-    background-image: url(/images/example-bg.png);
-  }
-  .snippet-img {
-    height: 206px;
-  }
-  .snippet {
-    margin-bottom: 19px;
-    -webkit-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease;
-  }
-  .right-col {
-    margin-top: -42px;
-  }
-  .button-column {
-    padding-top: 61px;
-  }
-  .company-column {
-    text-align: center;
-  }
-  .footer-nav-bar {
-    text-align: center;
-  }
-  .left-footer-col {
-    margin-bottom: 13px;
-    text-align: center;
-  }
-  .content-bg {
-    min-height: 350px;
-    padding-top: 216px;
-    background-image: url(/images/example-bg.png);
-  }
-}
-@media (max-width: 479px) {
-  .button {
-    -webkit-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease;
-  }
-  .section.header {
-    padding-right: 16px;
-    padding-bottom: 8px;
-    padding-left: 16px;
-  }
-  .nav-link {
-    display: block;
-    margin-bottom: 19px;
-    -webkit-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease;
-  }
-  .hero-bg {
-    background-image: url(/images/example-bg.png);
-  }
-  .hero-bg.content {
-    background-image: url(/images/example-bg.png);
-  }
-  .section-description {
-    width: 50%;
-  }
-  .snippet-img {
-    
-  }
-  .snippet {
-    -webkit-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease;
-  }
-  .content-bg {
-    min-height: 330px;
-    padding-top: 172px;
-    background-image: url(/images/example-bg.png);
-  }
 }

@@ -2,18 +2,16 @@ import webapp2
 import jinja2
 import os
 import logging
+import settings
 
 #from utils import *
 from database import Category,Product, SubProduct,Payment
 
 
-template_dir = os.path.join(os.path.dirname(__file__), 'templates')
+template_dir = os.path.join(os.path.dirname(__file__), 'templatesadmin')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                 autoescape = True)
 
-right_username = "admin"
-right_password = "root"
-admin_secret = "5e4r6t7zughkjftzguzuhijonbkhjzgqwe2190u98iokml"
 
 class AdminBaseHandler(webapp2.RequestHandler):
     def render_str(self, template, **params):
@@ -25,12 +23,12 @@ class AdminBaseHandler(webapp2.RequestHandler):
         self.response.out.write(*a, **kw)
     #check for admin coockie
     def adminrender(self, template, **kw):
-        if self.request.cookies.get('admin_secret') == admin_secret:
+        if self.request.cookies.get('admin_secret') == settings.admin_secret:
             self.response.out.write(self.render_str(template, **kw))
         else:
             self.redirect("/admin/login")
     def checkAdminCookie(self):
-        if self.request.cookies.get('admin_secret') == admin_secret:
+        if self.request.cookies.get('admin_secret') == settings.admin_secret:
             return True
             
 
@@ -44,8 +42,8 @@ class AdminLogin(AdminBaseHandler):
     def post(self):
         username = self.request.get("username")
         password = self.request.get("password")
-        if username == right_username and password == right_password:
-            self.response.headers.add_header('Set-Cookie', 'admin_secret=%s; Path=/' % admin_secret)
+        if username == settings.right_admin_username and password == settings.right_admin_password:
+            self.response.headers.add_header('Set-Cookie', 'admin_secret=%s; Path=/' % settings.admin_secret)
             self.redirect("/admin/index") 
         else:
             errortext = "user or password not correct"
@@ -147,7 +145,9 @@ class AdminAddSubProduct(AdminBaseHandler):
         if product_id_string.isdigit() and self.checkAdminCookie():
             product_id = int(product_id_string)
             value = self.request.get("value")
-            Product.addSubProduct(product_id, value)
+            position = self.request.get("position")
+            position = int(position)
+            Product.addSubProduct(product_id, value, position)
             self.redirect("/admin/product/%s/addsubproduct" % product_id_string)
         else:
             self.redirect("/admin/index")
@@ -164,12 +164,19 @@ class AdminEditSubProducts(AdminBaseHandler):
         else:
             self.redirect("/admin/index")
             
-class AdminDeleteSubProduct(AdminBaseHandler):
+class AdminEditSubProduct(AdminBaseHandler):
     def get(self, subproduct_id_string):
         if subproduct_id_string.isdigit() and self.checkAdminCookie():
             subproduct_id = int(subproduct_id_string)
-            SubProduct.deleteSubProduct(subproduct_id)
-        self.redirect("/admin/index")
+            product = SubProduct.getProduct(subproduct_id)
+            command = self.request.get("command")
+            if command == "delete":
+                SubProduct.deleteSubProduct(subproduct_id)
+            elif command == "available":
+                SubProduct.setAvailability(subproduct_id, True)
+            elif command == "notavailable":
+                SubProduct.setAvailability(subproduct_id, False)
+        self.redirect("/admin/product/%s/editsubproducts" % product.key.id())
         
 class AdminEditPayments(AdminBaseHandler):
     def get(self):
@@ -179,15 +186,15 @@ class AdminEditPayments(AdminBaseHandler):
 class AdminEditPayment(AdminBaseHandler):
     def get(self, payment_id_string):
         payment_id = int(payment_id_string)
-        comment = self.request.get("comment")
-        if comment == "delete":
+        command = self.request.get("command")
+        if command == "delete":
             Payment.deletePayment(payment_id)
-        elif comment == "payed":
+        elif command == "payed":
             Payment.setPayed(payment_id, True)
-        elif comment == "notpayed":
+        elif command == "notpayed":
             Payment.setPayed(payment_id, False)
         else:
-            Payment.setPaymentState(payment_id, comment)
+            Payment.setPaymentState(payment_id, command)
         self.redirect("/admin/payments")
             
             
@@ -201,7 +208,7 @@ app = webapp2.WSGIApplication([('/admin/*', AdminPage),
                                ('/admin/product/editproduct', AdminEditProducts),
                                ('/admin/product/(\d+)/addsubproduct', AdminAddSubProduct),
                                ('/admin/product/(\d+)/editsubproducts', AdminEditSubProducts),
-                               ('/admin/product/deletesubproduct/(\d+)', AdminDeleteSubProduct),
+                               ('/admin/product/editsubproduct/(\d+)', AdminEditSubProduct),
                                ('/admin/payments',AdminEditPayments),
                                ('/admin/payment/(\d+)',AdminEditPayment)
                                ], debug=True)

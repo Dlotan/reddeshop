@@ -1,0 +1,28 @@
+{% extends "adminbase.html" %}
+{% block title %}Edit Sub Product{% endblock %}
+{% block headline %}Edit Sub Product{% endblock %}
+{% block main_content %}
+Product ID: {{product.key.id()}}<br>
+Product Name: {{product.name}}<br><br>
+SubProducts:<br><br>
+<table border="1">
+<tr>
+<th>Value</th>
+<th>Position</th>
+<th>Avalability</th>
+<th>Delete</th>
+<th>Make Available</th>
+<th>Make not Available</th>
+</tr>
+{% for subproduct in subproducts %}
+	<tr>
+	<td>{{subproduct.value}}</td>
+	<td>{{subproduct.position}}</td>
+	<td>{{subproduct.available}}</td>
+	<td><a href="/admin/product/editsubproduct/{{subproduct.key.id()}}?command=delete">Delete</a></td>
+	<td><a href="/admin/product/editsubproduct/{{subproduct.key.id()}}?command=available">Available</a></td>
+	<td><a href="/admin/product/editsubproduct/{{subproduct.key.id()}}?command=notavailable">Not Available</a></td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}
