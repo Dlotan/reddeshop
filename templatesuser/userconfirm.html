@@ -1,0 +1,128 @@
+{% extends "userbase.html" %}
+{% block title %}
+Confirm
+{% endblock %}
+{% block javascript %}
+	<script>
+		$(function() {
+			var sumcost = {{params['shipping_cost']}} + {{sumprice}}
+			$('#sumcost').html('<b>' + sumcost + ' EUR </b>')
+		});
+	</script>
+{% endblock %}
+{% block main_content %}
+  <div class="buy-container">
+    <div class="w-container">
+      <div class="w-row">
+      <table border = "1">
+      <tr>
+      	<th>
+      		Produktname
+      	</th>
+      	<th>
+      		Size
+      	</th>
+      	<th>
+      		Einzelpreis
+      	</th>
+      	<th>
+      		Menge
+      	</th>
+      	<th>
+      		Gesamt
+      	</th>
+      </tr>
+      {% for position in cart %}
+      <tr>
+      	<td>{{position[0].name}}</td>
+      	<td>{{position[1].value}}</td>
+      	{% set price = position[0].price / 100.0 %}
+      	<td>{{'%0.2f'| format(price|float)}}</td>
+      	<td>{{position[2]}} EUR</td>
+      	
+      	{% set price = (position[0].price / 100.0) * position[2] %}
+      	<td>{{'%0.2f'| format(price|float)}} EUR</td>
+      </tr>
+      {% endfor %}
+      <tr>
+      	<td>Versandkosten:</td>
+      	<td></td>
+      	<td></td>
+      	<td></td>
+      	<td><div id="shippingcost">{{params['shipping_cost']}} EUR</div></td>
+      <tr>
+       	<td>----------</td>
+       	<td></td>
+      	<td></td>
+      	<td></td>
+       	<td>-----------</td>
+      </tr>
+      <tr>
+      	<td><b>Gesammt:</b></td>
+      	<td></td>
+      	<td></td>
+      	<td></td>
+      	<td><div id="sumcost"><b>0.00 EUR</b></div></td>
+      </tr>
+      </table>
+      <br>
+      <br>
+      <table border="1">
+       	<tr>
+		<td>Vorname:</td><td>{{params['first_name']}}</td>
+		</tr>
+		<tr>
+		<td>Nachname:</td><td>{{params['last_name']}}</td>
+		</tr>
+		<tr>
+		<td>Strasse:</td><td>{{params['street']}}</td>
+		</tr>
+		<tr>
+		<td>Hausnummer:</td><td>{{params['street_number']}}</td>
+		</tr>
+		<tr>
+		<td>Plz:</td><td>{{params['plz']}}</td>
+		</tr>
+		<tr>
+		<td>Stadt:</td><td>{{params['city']}}</td>
+		</tr>
+		<tr>
+		<td>Land:</td><td>{{params['country']}}</td>
+		</tr>
+		<tr>
+		<td>E-Mail:</td><td>{{params['email']}}</td>
+		</tr>
+		<tr>
+		<td>Shipping Region:</td><td>{{params['shipping_region']}}</td>
+		</tr>
+		<tr>
+		<td>Bezahlart:</td><td>
+			{% if params['paymethod'] == "paypal" %}
+	      	Paypal
+	      	{% elif params['paymethod'] == "persoenlich" %}
+	      	Persoenlich
+	      	{% elif params['paymethod'] == "ueberweisung" %}
+	      	&Uuml;berweisung
+	      	{% endif %}
+      	</td>
+		</tr>
+	</table>
+		<br>
+		<form method="post" action="/confirm">
+			<input type="hidden" name="first_name" value="{{params['first_name']}}">
+			<input type="hidden" name="last_name" value="{{params['last_name']}}">
+			<input type="hidden" name="street" value="{{params['street']}}">
+			<input type="hidden" name="street_number" value="{{params['street_number']}}">
+			<input type="hidden" name="plz" value="{{params['plz']}}">
+			<input type="hidden" name="city" value="{{params['city']}}">
+			<input type="hidden" name="country" value="{{params['country']}}">
+			<input type="hidden" name="email" value="{{params['email']}}">
+			<input type="hidden" name="email2" value="{{params['email2']}}">
+			<input type="hidden" name="shipping_region" value="{{params['shipping_region']}}">
+			<input type="hidden" name="paymethod" value="{{params['paymethod']}}">
+			<input type="submit" class ="button" value="Jetzt Verbindlich Kaufen">
+		</form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

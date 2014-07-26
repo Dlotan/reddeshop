@@ -4,8 +4,7 @@
 {% block main_content %}
 <table border = "1">
 <tr>
-	<th>Product Name</th>
-	<th>Subproduct</th>
+	<th>Positions</th>
 	<th>Price (Cents)</th>
 	<th>First Name</th>
 	<th>Last Name</th>
@@ -30,10 +29,20 @@
 </tr>
 {% for paymentdict in paymentdicts %}
 <tr>
-	<td>{{paymentdict['product'].name}}</td>
-	<td>{{paymentdict['subproduct'].value}}</td>
-	{% set price =  paymentdict['product'].price + paymentdict['contact'].shipping_cost %}
-	<td>{{price}}</td>
+	<td><table border="1">
+	<tr>
+		<th>Product</th>
+		<th>Subproduct</th>
+		<th>Amount</th>
+	</tr>
+	{% for position in paymentdict['cart'] %}
+	<tr><td>{{position[0].name}}</td>
+	<td>{{position[1].value}}</td>
+	<td>{{position[2]}}</td>
+	</tr>
+	{% endfor %}
+	</table></td>
+	<td>{{paymentdict['sumprice']}}</td>
 	<td>{{paymentdict['contact'].first_name}}</td>
 	<td>{{paymentdict['contact'].last_name}}</td>
 	<td>{{paymentdict['contact'].street}}</td>

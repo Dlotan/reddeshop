@@ -10,12 +10,14 @@
      <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="/css/webflow.css">
-    <link rel="stylesheet" type="text/css" href="/css/reddeshop.webflow.css">
+    <link rel="stylesheet" type="text/css" href="/css/standard.css">
+    <link rel="stylesheet" type="text/css" href="/css/reddeshop.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <link rel="icon" type="image/x-icon" href="http://dlotanspielewiese.appspot.com/images/favicon.ico">
     <link rel="apple-touch-icon" href="https://y7v4p6k4.ssl.hwcdn.net/51e081c5241660ce7800001f/51e755c7e48178d53e000034_thumbnail-starter.png">
     <script type="text/javascript" src="/js/webflow.js" defer></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.js"></script‌​>
     {% block trackingcode %}
     <script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -30,6 +32,12 @@
 	{% endblock %}
     {% block javascript %}
     {% endblock %}
+    <script>
+    $(function() {
+    {% block jquery %}
+    {% endblock %}
+    });
+    </script>
   </head><body>
   <div class="section header">
     <div class="w-container">
@@ -38,10 +46,21 @@
           <div class="company-title"><a class="company-title-link" href="/index"><img src="http://dlotanspielewiese.appspot.com/images/logo_invert.jpg"></a></div>
         </div>
         <div class="w-col w-col-8 w-clearfix nav-bar">
-        	<b>Versandkostenfrei</b> innerhalb Deutschlands
         {% for category_iter in categories %}
         	<!--<a class="nav-link" href="/category/{{category_iter.name}}">{{category_iter.name}}</a>-->
         {% endfor %}
+        <div class = "shoppingcarticon" id="shoppingcarticon">
+        	<a href="/cart/show">
+        		<img src = "http://dlotanspielewiese.appspot.com/images/shoppingcart.png" class = "shoppingcartpicture">
+        		{% if iconnumber == 0 %}
+        			<div class ="shoppingcartpicturetexthidden" id="shoppingcartpicturetexthidden">
+        		{% else %}
+        			<div class ="shoppingcartpicturetext" id="shoppingcartpicturetext">
+        		{% endif %}
+        		{{iconnumber}}
+        		</div>
+        	</a>
+        </div>
         </div>
       </div>
     </div>
@@ -61,7 +80,7 @@
         	<a href= "mailto:larissagoeb@gmail.com" class = "email-icon icon">
         		<img src = "http://dlotanspielewiese.appspot.com/images/email.png" class = "icon-picture">
         	</a>
-        	<a href="/" target="_blank" class = "instagram-icon icon">
+        	<a href="http://instagram.com/madcatsclothing" target="_blank" class = "instagram-icon icon">
         		<img src = "http://dlotanspielewiese.appspot.com/images/Instagram.png" class = "icon-picture">
         	</a>
         </div>

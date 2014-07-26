@@ -9,8 +9,8 @@
      <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="/css/webflow.css">
-    <link rel="stylesheet" type="text/css" href="/css/reddeshop.webflow.css">
+    <link rel="stylesheet" type="text/css" href="/css/standard.css">
+    <link rel="stylesheet" type="text/css" href="/css/reddeshop.css">
     <link rel="icon" type="image/x-icon" href="http://dlotanspielewiese.appspot.com/images/favicon.ico">
     <link rel="apple-touch-icon" href="https://y7v4p6k4.ssl.hwcdn.net/51e081c5241660ce7800001f/51e755c7e48178d53e000034_thumbnail-starter.png">
     <script type="text/javascript" src="/js/webflow.js" defer></script>
@@ -22,14 +22,83 @@
 	
 	  ga('create', 'UA-43105426-1', 'madcatsclothing.com');
 	  ga('send', 'pageview');
-	
 	</script>
-  </head><body style ="overflow:hidden;">
-  	<a href="#" style= "text-decoration: none;">
-  	<div style = "text-align:center;margin-top: 1%;position:relative;margin-top:20%;">
-  		<!-- <img style = "" src = "http://dlotanspielewiese.appspot.com/images/Start.jpg"><br> -->
+	<script language="JavaScript">
+      // Ziel-Datum in MEZ
+      var jahr=2222, monat=2, tag=23, stunde=18, minute=00, sekunde=00;
+      var zielDatum=new Date(jahr,monat-1,tag,stunde,minute,sekunde);
+
+      function countdown() {
+        startDatum=new Date(); // Aktuelles Datum
+
+        // Countdown berechnen und anzeigen, bis Ziel-Datum erreicht ist
+        if(startDatum<zielDatum)  {
+
+          var jahre=0, monate=0, tage=0, stunden=0, minuten=0, sekunden=0;
+
+          // Jahre
+          while(startDatum<zielDatum) {
+            jahre++;
+            startDatum.setFullYear(startDatum.getFullYear()+1);
+          }
+          startDatum.setFullYear(startDatum.getFullYear()-1);
+          jahre--;
+
+          // Monate
+          while(startDatum<zielDatum) {
+            monate++;
+            startDatum.setMonth(startDatum.getMonth()+1);
+          }
+          startDatum.setMonth(startDatum.getMonth()-1);
+          monate--;
+
+          // Tage
+          while(startDatum.getTime()+(24*60*60*1000)<zielDatum) {
+            tage++;
+            startDatum.setTime(startDatum.getTime()+(24*60*60*1000));
+          }
+
+          // Stunden
+          stunden=Math.floor((zielDatum-startDatum)/(60*60*1000));
+          startDatum.setTime(startDatum.getTime()+stunden*60*60*1000);
+
+          // Minuten
+          minuten=Math.floor((zielDatum-startDatum)/(60*1000));
+          startDatum.setTime(startDatum.getTime()+minuten*60*1000);
+
+          // Sekunden
+          sekunden=Math.floor((zielDatum-startDatum)/1000);
+
+          // Anzeige formatieren
+          (tage!=1)?tage=tage+" Tage,  ":tage=tage+" Tag,  ";
+          (stunden!=1)?stunden=stunden+" Stunden,  ":stunden=stunden+" Stunde,  ";
+          (minuten!=1)?minuten=minuten+" Minuten  und  ":minuten=minuten+" Minute  und  ";
+          if(sekunden<10) sekunden="0"+sekunden;
+          (sekunden!=1)?sekunden=sekunden+" Sekunden":sekunden=sekunden+" Sekunde";
+
+          document.countdownform.countdowninput.value=
+              tage+stunden+minuten+sekunden;
+
+          setTimeout('countdown()',200);
+        }
+        // Anderenfalls alles auf Null setzen
+        else document.countdownform.countdowninput.value=
+            "0 Tage,  0 Stunden,  0 Minuten  und  00 Sekunden";
+      }
+    </script>
+  </head><body style ="" onload="countdown()">
+  	<a href="/index" style= "text-decoration: none;">
+  	<div style = "text-align:center;">
+  	<br>
+  		<form name="countdownform">
+      	<p>
+        	<input size="75" style="background-color:#ffffff;border-width:0;text-align:center;" name="countdowninput">
+      	</p>
+    	</form>
+    	Till new Collection<br>
+  		<img style="margin-top: 1%" src = "http://dlotanspielewiese.appspot.com/images/Start.jpg"><br>
   		<img style = "margin-top: 1.5%;" src = "http://dlotanspielewiese.appspot.com/images/Logo.jpg">
-  		<h3 style="font-family: Trebuchet MS; color: black; margin-top: 1%"><b>coming soon</b></h3>
+  		<!-- <h3 style="font-family: Trebuchet MS; color: black; margin-top: 1%"><b>coming soon</b></h3> -->
   	</div>
   	</a>
   </body>

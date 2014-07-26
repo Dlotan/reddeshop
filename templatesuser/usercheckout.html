@@ -1,0 +1,127 @@
+{% extends "userbase.html" %}
+{% block title %}
+Buy
+{% endblock %}
+{% block javascript %}
+{% endblock %}
+{% block jquery %}
+			var shipping_cost_string = $('#country').find(':selected').attr('shipping_cost')
+			$('#shippingcost').text(shipping_cost_string + ' EUR')
+			var sumcost = parseFloat(shipping_cost_string) + {{sumprice}}
+			$('#sumcost').html('<b>' + sumcost + ' EUR </b>')
+		  	$('#country').on('change', function() {
+				var shipping_cost_string = $(this).find(':selected').attr('shipping_cost')
+				$('#shippingcost').text(shipping_cost_string + ' EUR')
+				$('#sumcost').html('<b>' + (parseFloat(shipping_cost_string) + {{sumprice}}) + ' EUR </b>')
+			});
+{% endblock %}
+{% block main_content %}
+  <div class="buy-container">
+    <div class="w-container">
+      <div class="w-row">
+      <table border = "1">
+      <tr>
+      	<th>
+      		Produktname
+      	</th>
+      	<th>
+      		Size
+      	</th>
+      	<th>
+      		Einzelpreis 
+      	</th>
+      	<th>
+      		Menge 
+      	</th>
+      	<th>
+      		Gesamt 
+      	</th>
+      </tr>
+      {% for position in cart %}
+      <tr>
+      	<td>{{position[0].name}}</td>
+      	<td>{{position[1].value}}</td>
+      	{% set price = position[0].price / 100.0 %}
+      	<td>{{'%0.2f'| format(price|float)}} EUR</td>
+      	<td>{{position[2]}}</td>
+      	{% set price = price * position[2] %}
+      	<td>{{'%0.2f'| format(price|float)}} EUR</td>
+      </tr>
+      {% endfor %}
+      <tr>
+      	<td>Versandkosten:</td>
+      	<td></td>
+      	<td></td>
+      	<td></td>
+      	<td><div id="shippingcost">0.00 EUR</div></td>
+      <tr>
+       	<td>----------</td>
+       	<td></td>
+      	<td></td>
+      	<td></td>
+       	<td>-----------</td>
+      </tr>
+      <tr>
+      	<td><b>Gesamt:</b></td>
+      	<td></td>
+      	<td></td>
+      	<td></td>
+      	<td><div id="sumcost"><b>0.00 EUR</b></div></td>
+      </tr>
+      </table>
+      <br><br>
+        <form method="post">
+        <table border="0">
+        	<tr>
+			<td>Vorname</td><td><input type="text" name = "first_name" value = "{{params['first_name']}}" title="first name" pattern="/[^\(\)0-9]+/"></td><td class="error">{{params['first_name_error']}}</td>
+			</tr>
+			<tr>
+			<td>Nachname</td><td><input type="text" name = "last_name" value = "{{params['last_name']}}" title="last name" pattern="/[^\(\)0-9]+/"></td><td class="error">{{params['last_name_error']}}</td>
+			</tr>
+			<tr>
+			<td>Strasse</td><td><input type="text" name = "street" value = "{{params['street']}}"></td><td class="error">{{params['street_error']}}</td>
+			</tr>
+			<tr>
+			<td>Hausnummer</td><td><input type="text" name = "street_number" value = "{{params['street_number']}}"></td><td class="error">{{params['street_number_error']}}</td>
+			</tr>
+			<tr>
+			<td>Plz</td><td><input type="text" name = "plz" value = "{{params['plz']}}" title="plz" pattern="[0-9]+"></td><td class="error">{{params['plz_error']}}</td>
+			</tr>
+			<tr>
+			<td>Stadt</td><td><input type="text" name = "city" value = "{{params['city']}}" title="city" pattern="/[^\(\)0-9]+/"></td><td class="error">{{params['city_error']}}</td>
+			</tr>
+			<tr>
+			<td>Land</td><td><input type="text" name = "country" value = "{{params['country']}}" title="country" pattern="/[^\(\)0-9]+/"></td><td class="error">{{params['country_error']}}</td>
+			</tr>
+			<tr>
+			<td>E-Mail</td><td><input type="text" name = "email" value = "{{params['email']}}" title="email" pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;"></td><td class="error">{{params['email_error']}}</td>
+			</tr>
+			<tr>
+			<td>E-Mail wiederholen</td><td><input type="text" name = "email2" value = "{{params['email2']}}" title="email" pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;"></td><td class="error">{{params['email2_error']}}</td>
+			</tr>
+		</table>
+		<br>
+		Shipping:
+		<select name="shipping_region" size="1" id="country">
+			<option value = "germany" shipping_cost = "0.00">Deutschland +0.00 EUR</option>
+			<option value = "eu" shipping_cost = "7.00">EU +7.00 EUR</option>
+			<option value = "worldwide" shipping_cost = "15.00">Worldwide +15.00 EUR</option>
+		</select>
+		<br>
+		<br>
+		{{params['subproduct_error']}}
+		<br>
+		Bezahlart:<br>
+		<input type="radio" name="paymethod" value="paypal" checked> Paypal<br>
+		<input type="radio" name="paymethod" value="ueberweisung"> &Uuml;berweisung<br>
+		<input type="radio" name="paymethod" value="persoenlich"> Pers&ouml;nlich Dagersheim<br>
+		{{params['paymethod_error']}}
+		<br>
+		<input type="submit" class="button" value="Weiter">
+        </form>
+        <br>
+        <br>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -8,11 +8,63 @@ Abholung
   <div class="pay-container">
     <div class="w-container">
       <div class="w-row">
-      	Vielen Dank {{contact.first_name}}, dass Du das Produkt: {{product.name}} in der Ausf&uuml;hrung {{subproduct.value}} bei uns gekauft hast.<br>
+      	Vielen Dank {{contact.first_name}}, dass Du bei uns eingekauft hast!<br>
       	Bitte vereinbare einen Termin unter <a href="mailto:larissagoeb@gmail.com">larissagoeb@gmail.com</a>.<br><br>
-      	{% set price = (product.price / 100.0) + (contact.shipping_cost /100.0) %}
-      	Der Preis betr&auml;gt: {{'%0.2f'| format(price|float)}} EUR<br><br>
-      	<a href="/status/{{payment.key.id()}}">Bestellstatus</a>
+      	Der Preis betr&auml;gt: {{'%0.2f'| format(sumprice|float)}} EUR<br><br>
+      	<a href="/status/{{payment.key.id()}}">Bestellstatus</a><br><br><br>
+      	Produkte:<br><br>
+      	<table border ="0">
+      	<tr>
+        	<th>
+        		Produktname
+        	</th>
+        	<th>
+        		Size
+        	</th>
+        	<th>
+        		Einzelpreis
+        	</th>
+        	<th>
+        		Menge
+        	</th>
+        	<th>
+        		Gesamt
+        	</th>
+        </tr>
+        {% for position in cart %}
+        <tr>
+	        <td>{{position[0].name}}</td>
+	      	<td>{{position[1].value}}</td>
+	      	{% set price = position[0].price / 100.0 %}
+	      	<td>{{'%0.2f'| format(price|float)}} EUR</td>
+	      	<td id="amount">{{position[2]}}</td>
+	      	{% set price = price * position[2] %}
+	      	<td>{{'%0.2f'| format(price|float)}} EUR</td>
+	    </tr>
+        {% endfor %}
+        <tr>
+        	<td>Versandkosten</td>
+        	<td></td>
+        	<td></td>
+        	<td></td>
+        	{% set price = contact.shipping_cost / 100.0 %}
+        	<td>{{'%0.2f'| format(price|float)}} EUR</td>
+        </tr>
+        <tr>
+	       	<td>----------</td>
+	       	<td></td>
+	      	<td></td>
+	      	<td></td>
+	       	<td>-----------</td>
+      	</tr>
+        <tr>
+        	<td><b>Gesamt</b></td>
+        	<td></td>
+        	<td></td>
+        	<td></td>
+        	<td> <b>{{'%0.2f'| format(sumprice|float)}} EUR</b></td>
+      	</tr>
+      	</table>
       </div>
     </div>
   </div>

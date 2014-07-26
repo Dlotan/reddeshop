@@ -2,18 +2,68 @@
 {% block title %}
 Product
 {% endblock %}
+{% block javascript %}
+{% endblock %}
+{% block jquery %}
+	var dialog = $("#dialog").dialog({
+		autoOpen: false,
+		height:180,
+		width:400,
+		modal: true,
+		dialogClass: 'ui-dialog-osx',
+    	buttons: {
+    		"Weiter Shoppen": function() {   
+    		  $(this).dialog('close');
+    		},
+    		"Checkout": function() {
+    			window.location.href = "/checkout"
+    		},
+    		"Zur Hauptseite": function(){
+    			window.location.href = "/index"
+    		}
+    	}
+    });
+	$("#buybutton").click(function(){
+        var subproductid = $('#subproductselect').find(':selected').val();
+        var amount = $('#amount').find(':selected').val();
+        window.location.href = "/addsingle/" + subproductid + "/" + amount;
+    });
+    $("#tocartbutton").click(function(){
+        var subproductid = $('#subproductselect').find(':selected').val();
+    	var amount = $('#amount').find(':selected').val();
+    	{% if iconnumber == 0 %}
+    	$("#shoppingcartpicturetexthidden").load("/cart/add/" + subproductid + "/" + amount, function(response, status, xhr) {
+    		if (status == "success") {
+				$("#shoppingcartpicturetexthidden").css("visibility", "visible")
+				dialog.dialog("open");
+			}
+			else{
+			}
+    	});
+    	{% else %}
+    	$("#shoppingcartpicturetext").load("/cart/add/" + subproductid + "/" + amount, function(response, status, xhr) {
+    		if (status == "success") {
+				$("#shoppingcartpicturetext").css("visibility:visible;")
+				dialog.dialog("open");
+			}
+			else{
+			}
+    	});
+    	{% endif %}
+    });
+{% endblock %}
 {% block main_content %}
   <div class="product-container">
     <div class="w-container">
       <div class="w-row">
         <div class="w-col w-col-6">
-          <img src="{{product.pictureurl}}" alt="Produktbild :D">
+          <img src="{{product.pictureurl}}" class="productpicture" alt="Produktbild :D">
           <br>
           <br>
         </div>
         <div class="w-col w-col-6 w-clearfix descriptioncolumn">
         <div class ="product-name-box">
-          <h1 class = "product-name">{{product.name}}</h1>
+          <h1 class = "headline">{{product.name}}</h1>
         </div>
           <p>{{product.description}}</p>
           <div class="textblock">Sizes: <ul>
@@ -32,10 +82,47 @@ Product
           	</li>
           {% endfor %}</ul></div>
           {% set price = product.price / 100.0 %}
-          <div class="textblock">{{'%0.2f'| format(price|float)}} EUR</div><br>
+          <div class="textblock">{{'%0.2f'| format(price|float)}} EUR</div><br><br>
+          <table border=0>
+          <tr>
+          <td>
+          Menge: 
+          </td>
+          <td>
+		  <select name="amount" size="1" id="amount">
+			<option value = "1">1</option>
+			<option value = "2">2</option>
+			<option value = "3">3</option>
+			<option value = "4">4</option>
+			<option value = "5">5</option>
+			<option value = "6">6</option>
+			<option value = "7">7</option>
+			<option value = "8">8</option>
+			<option value = "9">9</option>
+		  </select>
+		  </td>
+		  </tr>
+		  <tr>
+		  <td>
+		  Size: 
+		  </td>
+		  <td>
+		  <select name="subproductselect" size="1" id="subproductselect">
+		  {% for subproduct in subproducts %}
+			  {% if subproduct.available == True %}
+			  	<option value="{{subproduct.key.id()}}">{{subproduct.value}}</option>
+			  {% endif %}
+		  {% endfor %}
+		  </select>
+		  </td>
+		  </tr>
+		  </table><br>
           <div class = "buttonbox">
-          	<a class="button" href="/buy/{{product.key.id()}}">Kaufen / Size w&auml;hlen</a><br><br>
-          	<!-- <a class="button" href="/buy/{{product.key.id()}}">In Einkaufswagen</a> -->
+          	<input type="button" class="button" id="buybutton" value="Einzeln Kaufen"/><br><br>
+          	<input type="button" class="button" id="tocartbutton" value="In den Einkaufswagen"/>
+          </div>
+          <div id="dialog" title="Continue Shopping?">
+          	Weiter Shoppen?
           </div>
           <br>
           <br>

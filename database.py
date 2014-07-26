@@ -164,15 +164,10 @@ def getShippingCost(shipping_region):
     elif shipping_region == "eu":
         return 700
     else:
-        return 1500
-    
-        
-#class Cart(ndb.Model):
-#    subproducts = ndb.KeyProperty(kind = 'SubProduct', required = True)
-    
+        return 1500   
     
 class Payment(ndb.Model):
-    subproduct = ndb.KeyProperty(kind = 'SubProduct',required = True)
+    positions = ndb.PickleProperty(required = True)
     contact = ndb.KeyProperty(kind = 'Contact',required = True)
     date = ndb.DateTimeProperty(auto_now_add=True)
     paymethod = ndb.StringProperty(choices = ["paypal", "persoenlich", "ueberweisung"], required = True)
@@ -182,10 +177,9 @@ class Payment(ndb.Model):
     def getPaymentById(cls, payment_id):
         return cls.get_by_id(payment_id, ndb.Key(Category,'global'))
     @classmethod
-    def addContactAndPayment(cls, product_id, params):
+    def addContactAndPayment(cls, cart , params):
         contact = Contact.addContact(params)
-        subproduct = Product.getSubProductByName(product_id, params['subproduct_name'])
-        payment = Payment(subproduct = subproduct.key,
+        payment = Payment(positions = cart,
                           contact = contact,
                           paymethod = params['paymethod'],
                           parent = ndb.Key(Category,'global'))
@@ -195,14 +189,27 @@ class Payment(ndb.Model):
         payment = cls.getPaymentById(payment_id)
         return Contact.getContactById(payment.contact.id())
     @classmethod
-    def getSubProduct(cls, payment_id):
+    def getSubProducts(cls, payment_id):
         payment = cls.getPaymentById(payment_id)
         return SubProduct.getSubProductById(payment.subproduct.id())
     @classmethod
-    def getProduct(cls, payment_id):
+    def getProducts(cls, payment_id):
         payment = cls.getPaymentById(payment_id)
         subproduct = SubProduct.getSubProductById(payment.subproduct.id())
         return SubProduct.getProduct(subproduct.key.id())
+    @classmethod
+    def getPositions(cls, payment_id):
+        payment = cls.getPaymentById(payment_id)
+        return payment.positions
+    @classmethod
+    def getExtendedPositions(cls, payment_id):
+        positions = cls.getPositions(payment_id)
+        extendedlist = []
+        for position in positions:
+            product = SubProduct.getProduct(position[0])
+            subproduct = SubProduct.getSubProductById(position[0])
+            extendedlist.append((product,subproduct,position[1]))
+        return extendedlist
     @classmethod
     def getActivePaymentDicts(cls):
         mylist = []
@@ -212,8 +219,8 @@ class Payment(ndb.Model):
             params = {}
             params['payment'] = payment
             params['contact'] = cls.getContact(payment.key.id())
-            params['product'] = cls.getProduct(payment.key.id())
-            params['subproduct'] = cls.getSubProduct(payment.key.id())
+            params['cart'] = cls.getExtendedPositions(payment.key.id())
+            params['sumprice'] = cls.getSumPrice(payment.key.id())
             mylist.append(params)
         return mylist
     @classmethod
@@ -233,14 +240,19 @@ class Payment(ndb.Model):
         payment.put()
     @classmethod
     def getSumPrice(cls, payment_id):
-        payment = cls.getPaymentById(payment_id)
         contact = cls.getContact(payment_id)
         shipping_cost = contact.shipping_cost
-        product_price = SubProduct.getProduct(payment.subproduct.id()).price
+        product_price = cls.getSumWithoutShippingPrice(payment_id)
         return shipping_cost + product_price
     @classmethod
+    def getSumWithoutShippingPrice(cls, payment_id):
+        extendedpositions = cls.getExtendedPositions(payment_id)
+        summ = 0
+        for extendedposition in extendedpositions:
+            summ = summ + (extendedposition[0].price * extendedposition[2])
+        return summ      
+    @classmethod
     def getShippingCost(cls, payment_id):
-        payment = cls.getPaymentById(payment_id)
         contact = cls.getContact(payment_id)
         return contact.shipping_cost
         

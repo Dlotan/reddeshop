@@ -1,0 +1,85 @@
+{% extends "userbase.html" %}
+{% block title %}
+Einkaufswagen
+{% endblock %}
+{% block javascript %}
+{% endblock %}
+{% block jquery %}
+	$(".button").click(function(){
+		var shoppingcartamount = parseInt($("#shoppingcartpicturetext").text())
+		var amount = $(this).parent().parent().find('#amount').text()
+		$("#shoppingcartpicturetext").text( shoppingcartamount - amount)
+		if($("#shoppingcartpicturetext").text() == "0")
+		{
+			$("#shoppingcartpicturetext").hide()
+			$('#itemsincartbutton').css("visibility", "hidden")
+			$('#itemsincart').css("visibility", "hidden")
+			$('#itemsincarttext').css("visibility", "visible")
+		}
+		var subproduct_id = $(this).attr('subproduct_id')
+		$.get("/cart/delete/" + subproduct_id,function(data,status){
+  		});
+  		$(this).parent().parent().hide()
+    });
+{% endblock %}
+{% block main_content %}
+  <div class="buy-container">
+    <div class="w-container">
+      <div class="w-row">
+        <h1 class="headline">Shopping Cart</h1><br><br>
+        {% if cart|length > 0 %}
+        <table border = "0" id="itemsincart">
+        <tr>
+        	<th>
+        		Produktname
+        	</th>
+        	<th>
+        		Size
+        	</th>
+        	<th>
+        		Einzelpreis
+        	</th>
+        	<th>
+        		Menge
+        	</th>
+        	<th>
+        		Gesamt
+        	</th>
+        	<th>
+        		Delete
+        	</th>
+        </tr>
+        {% endif %}
+        {% for position in cart%}
+        <tr>
+	        <td>{{position[0].name}}</td>
+	      	<td>{{position[1].value}}</td>
+	      	{% set price = position[0].price / 100.0 %}
+	      	<td>{{'%0.2f'| format(price|float)}} EUR</td>
+	      	<td id="amount">{{position[2]}}</td>
+	      	{% set price = price * position[2] %}
+	      	<td>{{'%0.2f'| format(price|float)}} EUR</td>
+	      	<td><input type="button" class="button" value="Delete" subproduct_id="{{position[1].key.id()}}"/></td>
+	    </tr>
+        {% endfor %}
+        </table>
+        {% if cart|length > 0 %}
+        	<div id="itemsincarttext" style="visibility: hidden;">
+        		<br>
+        		<br>
+        		<br>
+        		<h2>Keine Items im Einkaufswagen</h2>
+        	</div>
+        	<a class="button" id="itemsincartbutton" href="/checkout">Checkout</a>
+        {% else %}
+        	<div id="itemsincarttext">
+        		<br>
+        		<br>
+        		<br>
+        		<h2>Keine Items im Einkaufswagen</h2>
+        	</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
