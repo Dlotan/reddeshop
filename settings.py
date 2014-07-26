@@ -1,6 +1,6 @@
 #Admin Data
-right_admin_username = "madcatsclothing"
-right_admin_password = "3000europroshirt"
+right_admin_username = ""
+right_admin_password = ""
 admin_secret = "5e4r6t7zughkjftzTHZJHGFfghdsadgguzuhijonu98iokml"
 #Paypal
 #PP_URL = "https://www.sandbox.paypal.com/cgi-bin/webscr" #sandbox
