@@ -1,4 +1,4 @@
 .pydevproject
 .project
 *.pyc
-settings.py
+*settings.py
